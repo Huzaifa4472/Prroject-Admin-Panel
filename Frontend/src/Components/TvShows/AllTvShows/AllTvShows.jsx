@@ -10,6 +10,7 @@ import TvShow from "./TvShow";
 import { DarkModeContext } from "../../../context/darkModeContext";
 import { getDatabase, ref, onValue } from "firebase/database";
 import { FilteredDataContext } from "../../../context/FilteredDataContext";
+import Navbar from "../../Navbar";
 
 const AllTvShows = ({ showAddTv, setShowAddTv }) => {
   const { filteredShows: contextFilteredShows, shows: contextShows } =
@@ -94,15 +95,17 @@ const AllTvShows = ({ showAddTv, setShowAddTv }) => {
         show["TMDB ID"].includes(e.target.value) ||
         show.title.toLowerCase().includes(e.target.value.toLowerCase())
     );
-    if (filter.length) {
-      setFilteredShows(filter);
-    } else {
-      setFilteredShows(allData);
-    }
+    // if (filter.length) {
+    //   setFilteredShows(filter);
+    // } else {
+    //   setFilteredShows(allData);
+    // }
+    setFilteredShows(filter.length ? filter : []);
   }, 300);
 
   return (
     <div className=" min-h-screen ">
+      <Navbar handleSearch={handleSearch} />
       <h1 className="text-2xl font-semibold text-black dark:text-[#FDFDFD] mt-4 mb-12">
         All Tv Shows:
       </h1>
@@ -119,21 +122,10 @@ const AllTvShows = ({ showAddTv, setShowAddTv }) => {
           icon={<HiMiniLink className="text-white" size={90} />}
         />
       </div>
-      <div className="flex gap-4 justify-between md:flex-row flex-col my-8">
-        <div className="bg-white dark:bg-[#333438] text-[#858585] dark:text-[#FDFDFD] flex items-center justify-between px-8 py-3 rounded-xl w-full md:w-[34%]">
-          <input
-            type="text"
-            onChange={(e) => handleSearch(e)}
-            placeholder="Search something"
-            className="outline-none placeholder:text-[13px] bg-transparent placeholder:text-[#858585] placeholder:font-normal w-full"
-          />
-          <RxDividerVertical />
-          <RiSearchLine />
-        </div>
-
+      <div className="flex gap-4 justify-end md:flex-row flex-col my-8">
         <button
           onClick={() => setShowAddTvShowPopup(true)}
-          className="font-medium text-base flex items-center gap-2 bg-[#1D1C1C] dark:bg-[#333438] text-[#ffff] px-4 py-3 rounded-xl"
+          className="font-medium text-base  flex items-center gap-2 bg-[#1D1C1C] dark:bg-[#333438] text-[#ffff] px-4 py-3 rounded-xl"
         >
           <AiFillPlusCircle size={22} />
           <p className="font-medium text-base">Add New Show</p>
@@ -145,7 +137,13 @@ const AllTvShows = ({ showAddTv, setShowAddTv }) => {
           />
         )}
       </div>
-      <TvShow filteredShows={filteredShows} />
+      {filteredShows.length ? (
+        <TvShow filteredShows={filteredShows} />
+      ) : (
+        <p className="text-center text-gray-500 dark:text-gray-400">
+          No item matches
+        </p>
+      )}
     </div>
   );
 };

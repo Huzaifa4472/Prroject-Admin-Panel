@@ -1,6 +1,6 @@
-import { IoIosAddCircle } from 'react-icons/io';
-import SliderCard from './SliderCard';
-import { Link } from 'react-router-dom';
+import { IoIosAddCircle } from "react-icons/io";
+import SliderCard from "./SliderCard";
+import { Link } from "react-router-dom";
 
 const Slider = () => {
   return (

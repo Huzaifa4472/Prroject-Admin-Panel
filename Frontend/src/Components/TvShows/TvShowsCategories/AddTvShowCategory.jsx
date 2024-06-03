@@ -1,19 +1,19 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { getDatabase, ref, onValue, set } from "firebase/database";
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { getDatabase, ref, onValue, set } from 'firebase/database';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const AddTvShowCategory = () => {
   const [sliders, setSliders] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState({
     showIds: [],
-    title: "",
-    subtitle: "",
-    posterStyle: "",
+    title: '',
+    subtitle: '',
+    posterStyle: '',
   });
-  const [titleSearch, setTitleSearch] = useState("");
+  const [titleSearch, setTitleSearch] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const formRef = useRef(null);
@@ -22,7 +22,7 @@ const AddTvShowCategory = () => {
     setIsLoading(true);
     try {
       const db = getDatabase();
-      const starCountRef = ref(db, "shows/");
+      const starCountRef = ref(db, 'shows/');
       onValue(starCountRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
@@ -75,11 +75,11 @@ const AddTvShowCategory = () => {
         return selectedShows
           .filter((item) => item.id !== id)
           .map((item) => item.options)
-          .join(", ");
+          .join(', ');
       } else {
         return [...selectedShows, { id, option }]
           .map((item) => item.options)
-          .join(", ");
+          .join(', ');
       }
     });
   };
@@ -89,7 +89,7 @@ const AddTvShowCategory = () => {
       formData.showIds.includes(item.id)
     );
     if (selectedShows) {
-      setTitleSearch(selectedShows.map((item) => item.options).join(", "));
+      setTitleSearch(selectedShows.map((item) => item.options).join(', '));
     }
   }, [formData.showIds, sliders]);
 
@@ -100,22 +100,22 @@ const AddTvShowCategory = () => {
     const { title, ...rest } = formData;
     try {
       const db = getDatabase();
-      set(ref(db, "tvcategories/" + title), rest);
-      const options = { timeZone: "Asia/Dubai" };
+      set(ref(db, 'tvcategories/' + title), rest);
+      const options = { timeZone: 'Asia/Dubai' };
       set(
-        ref(db, "lastUpdated/time"),
-        new Date().toLocaleString("en-US", options)
+        ref(db, 'lastUpdated/time'),
+        new Date().toLocaleString('en-US', options)
       );
       toast.success(`Shows Category (${title}) added successfully`);
-      navigate("/TvShows/TvShows-categories");
+      navigate('/TvShows/TvShows-categories');
       setIsAdding(false);
-      setTitleSearch("");
+      setTitleSearch('');
       formRef.current.reset();
-      setFormData({ showIds: [], title: "", subtitle: "", posterStyle: "" });
+      setFormData({ showIds: [], title: '', subtitle: '', posterStyle: '' });
     } catch (error) {
       toast.error(`(${error.message})`);
       setIsAdding(false);
-      setTitleSearch("");
+      setTitleSearch('');
       setFormData({ showIds: [] });
     }
   };
@@ -140,7 +140,7 @@ const AddTvShowCategory = () => {
               <p className="loading loading-ring loading-lg"></p>
             </div>
           ) : (
-            "Back"
+            'Back'
           )}
         </button>
       </div>
@@ -175,7 +175,7 @@ const AddTvShowCategory = () => {
               placeholder="Latest Drama movies By Our Editors"
               onChange={handleInputChange}
               required
-              value={formData.subtitle}
+              value={formData?.subtitle || ''}
             />
           </div>
           <div className="flex flex-col">
@@ -188,7 +188,7 @@ const AddTvShowCategory = () => {
               className="text-black bg-transparent dark:text-[#FDFDFD] dark:bg-[#333438] border border-[#C8C8C8] px-3 rounded-lg py-2"
               required
               onChange={handleInputChange}
-              value={formData?.posterStyle || ""}
+              value={formData?.posterStyle || ''}
             >
               <option
                 className="text-black bg-transparent dark:text-[#FDFDFD] dark:bg-[#333438]"
@@ -196,8 +196,8 @@ const AddTvShowCategory = () => {
               >
                 Select Poster Style
               </option>
-              <option value="style1">Large</option>
-              <option value="style2">Small</option>
+              <option value="Large">Large</option>
+              <option value="Small">Small</option>
             </select>
           </div>
           <div className="flex flex-col">
@@ -210,7 +210,7 @@ const AddTvShowCategory = () => {
                 placeholder="Tv Shows Available"
                 className="text-black dark:text-[#FDFDFD] dark:bg-[#333438] bg-transparent border border-[#C8C8C8] px-3 rounded-lg w-full py-2"
                 onFocus={() =>
-                  document.getElementById("dropdown").classList.remove("hidden")
+                  document.getElementById('dropdown').classList.remove('hidden')
                 }
                 value={titleSearch}
                 readOnly
@@ -246,7 +246,7 @@ const AddTvShowCategory = () => {
                 <p className="loading loading-ring loading-lg"></p>
               </div>
             ) : (
-              "Add Tv Show Category"
+              'Add Tv Show Category'
             )}
           </button>
         </div>

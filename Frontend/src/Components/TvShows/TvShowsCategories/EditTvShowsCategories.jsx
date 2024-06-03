@@ -4,6 +4,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { TiDelete } from 'react-icons/ti';
+import { RiCheckLine } from 'react-icons/ri'; // Import the check mark icon
 
 const EditTvShowsCategories = ({
   setShowEditTvShowCategories,
@@ -11,25 +12,25 @@ const EditTvShowsCategories = ({
   onUpdate,
 }) => {
   const [sliders, setSliders] = useState(null);
-  const [isUpdating, setIsUpdating] = useState(false);
   const [formData, setFormData] = useState({
-    title: '',
-    subtitle: '',
-    posterStyle: '',
-    showIds: [],
+    id: initialData.id,
+    subtitle: initialData.subtitle,
+    posterStyle: initialData.posterStyle,
+    showIds: initialData.showIds || [],
   });
   const [titleSearch, setTitleSearch] = useState('');
-  const navigate = useNavigate();
   const formRef = useRef(null);
   const dropdownRef = useRef(null);
-
+  console.log(initialData);
   useEffect(() => {
+    const { id, subtitle, posterStyle, showIds } = initialData;
     setFormData({
-      title: initialData.title,
-      subtitle: initialData.subtitle,
-      posterStyle: initialData.posterStyle,
-      showIds: initialData.showIds || [],
+      id: id || '',
+      subtitle: subtitle || '',
+      posterStyle: posterStyle || '',
+      showIds: showIds || [],
     });
+    setTitleSearch(''); // Reset titleSearch when component re-renders
   }, [initialData]);
 
   const fetchData = useCallback(() => {
@@ -64,12 +65,13 @@ const EditTvShowsCategories = ({
 
   const handleIdSelect = (id) => {
     const selectedMovie = sliders.find((item) => item.id === id);
-    if (selectedMovie) {
-      setTitleSearch(selectedMovie.options);
+    if (selectedMovie && !formData.showIds.includes(id)) {
+      const updatedShowIds = [...formData.showIds, id];
       setFormData((prev) => ({
         ...prev,
-        showIds: [...prev.showIds, id],
+        showIds: updatedShowIds,
       }));
+      setTitleSearch(''); // Clear the search field after selection
       dropdownRef.current.classList.add('hidden');
     }
   };
@@ -84,6 +86,14 @@ const EditTvShowsCategories = ({
     if (match) {
       handleIdSelect(match[1]);
     }
+  };
+
+  const handleRemoveId = (id) => {
+    const updatedShowIds = formData.showIds.filter((showId) => showId !== id);
+    setFormData((prev) => ({
+      ...prev,
+      showIds: updatedShowIds,
+    }));
   };
 
   const handleSubmit = (event) => {
@@ -115,7 +125,7 @@ const EditTvShowsCategories = ({
       >
         <div className="flex items-center justify-between w-[100%] text-white px-4 py-3 bg-[#1D1C1C] rounded-t-xl">
           <h1 className="dark:text-[#FDFDFD] my-4 text-2xl">
-            Edit Movie Category
+            Edit show Category
           </h1>
           <TiDelete
             size={35}
@@ -131,11 +141,11 @@ const EditTvShowsCategories = ({
             <input
               type="text"
               name="title"
-              className="text-slate-400 bg-transparent border w-full dark:text-[#FDFDFD] dark:placeholder:text-[#FDFDFD] px-3 rounded-lg p-3"
+              className="text-slate-400 bg-transparent border w-full dark:text-[#FDFDFD] dark:placeholder-text-[#FDFDFD] px-3 rounded-lg p-3"
               required
               placeholder="Tv shows"
               onChange={handleInputChange}
-              value={formData.title}
+              value={formData?.id || initialData.id}
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -145,7 +155,7 @@ const EditTvShowsCategories = ({
             <input
               type="text"
               name="subtitle"
-              className="text-slate-400 bg-transparent border w-full dark:text-[#FDFDFD] dark:placeholder:text-[#FDFDFD] px-3 rounded-lg p-3"
+              className="text-slate-400 bg-transparent border w-full dark:text-[#FDFDFD] dark:placeholder-text-[#FDFDFD] px-3 rounded-lg p-3"
               placeholder="Tv show subtitle"
               required
               onChange={handleInputChange}
@@ -158,52 +168,70 @@ const EditTvShowsCategories = ({
             </label>
             <select
               name="posterStyle"
-              className="text-slate-400 bg-transparent border w-full dark:text-[#FDFDFD] dark:placeholder:text-[#FDFDFD] px-3 rounded-lg p-3"
+              className="text-slate-400 bg-transparent border w-full dark:text-[#FDFDFD] dark:placeholder:text-[#FDFDFD] dark:placeholder:bg-black px-3 rounded-lg p-3"
               required
               onChange={handleInputChange}
-              value={formData.posterStyle}
+              defaultValue={formData.posterStyle || initialData.posterStyle}
             >
-              <option className="text-slate-400" value="">
-                Select Poster Style
-              </option>
-              <option value="Large">Large</option>
-              <option value="Small">Small</option>
+              <optgroup className="bg-white dark:bg-black">
+                <option className="text-slate-400 " value="">
+                  Select Poster Style
+                </option>
+                <option value="Large">Large</option>
+                <option value="Small">Small</option>
+              </optgroup>
             </select>
           </div>
-          <div className="flex flex-col z-[60]">
+          <div className="flex flex-col gap-2 z-[60]">
             <label className="text-black font-semibold dark:text-[#FDFDFD]">
               Tv Show TMDB ID
             </label>
-            <div className="relative w-full">
+            <div className="flex input-container items-center gap-2 relative max-w-[220px] border  border-[#C8C8C8] px-3 rounded-lg   overflow-x-auto h-[47px] bg-transparent overflow-scroll">
+              {formData.showIds.map((id) => (
+                <div
+                  key={id}
+                  className="inline-flex items-center bg-gray-200 h-7 dark:bg-[#555555] px-1  rounded-lg"
+                >
+                  <span className="text-black  dark:text-[#FDFDFD]">{id}</span>
+                  <TiDelete
+                    size={20}
+                    className="cursor-pointer"
+                    onClick={() => handleRemoveId(id)}
+                  />
+                </div>
+              ))}
               <input
                 type="text"
-                placeholder="Tv Shows Available"
-                className="text-black dark:text-[#FDFDFD] dark:bg-[#333438] bg-transparent border border-[#C8C8C8] px-3 rounded-lg w-full py-2"
-                onFocus={() => dropdownRef.current.classList.remove('hidden')}
+                className="text-black dark:text-[#FDFDFD] min-w-[50%]   bg-transparent focus:outline-none"
                 value={titleSearch}
                 onChange={handleManualIdInput}
-                onBlur={handleBlur}
-                required
+                onFocus={() => dropdownRef.current.classList.remove('hidden')}
               />
-              <div
-                id="dropdown"
-                ref={dropdownRef}
-                className="dropdown-content hidden absolute w-full bg-white dark:bg-[#333438] shadow-lg rounded-lg mt-1 max-h-60 overflow-auto z-[60]"
-              >
-                {sliders?.map((item) => (
-                  <a
-                    key={item.id}
-                    href="#!"
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      handleIdSelect(item.id);
-                    }}
-                    className="block px-4 py-2 text-black dark:text-[#FDFDFD] dark:hover:bg-[#333438] hover:bg-gray-200"
-                  >
-                    {item.options}
-                  </a>
-                ))}
-              </div>
+            </div>
+            <div
+              id="dropdown"
+              ref={dropdownRef}
+              className="dropdown-content hidden absolute  bg-white dark:bg-[#333438] shadow-lg rounded-lg mt-20 max-h-60 overflow-auto z-[60]"
+            >
+              {sliders?.map((item) => (
+                <a
+                  key={item.id}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    handleIdSelect(item.id);
+                  }}
+                  className={`block px-4 py-2 text-black dark:text-[#FDFDFD] dark:hover:bg-[#333438] hover:bg-gray-200 ${
+                    formData.showIds.includes(item.id)
+                      ? 'bg-gray-200 dark:bg-[#555555]'
+                      : ''
+                  }`}
+                >
+                  {item.options}
+                  {formData.showIds.includes(item.id) && (
+                    <RiCheckLine className="inline-block ml-2 text-green-500" />
+                  )}
+                </a>
+              ))}
             </div>
           </div>
         </div>

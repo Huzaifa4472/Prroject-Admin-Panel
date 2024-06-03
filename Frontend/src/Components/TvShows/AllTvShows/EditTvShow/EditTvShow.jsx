@@ -128,8 +128,21 @@ const EditTvShow = ({ setShowEditPopup, showToEdit, onEdit }) => {
     setShows(updatedShows);
   };
 
+  const handleDeleteLink = (
+    showIndex,
+    episodeIndex,
+    linkIndex,
+    seasonIndex
+  ) => {
+    const newShows = [...shows];
+    newShows[showIndex].seasons[seasonIndex].episodes[
+      episodeIndex
+    ].links.splice(linkIndex, 1);
+    setShows(newShows);
+  };
+
   return (
-    <div className="fixed bg-[#D9D9D9B2] dark:bg-[#33343886] z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
+    <div className="fixed bg-[#d9d9d90b] dark:bg-[#3334380a] z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
       <div className="bg-white dark:bg-[#0F0F0F] rounded-xl w-full md:w-4/5 lg:w-1/2">
         <EditPopupHeader
           setShowEditPopup={setShowEditPopup}
@@ -154,7 +167,16 @@ const EditTvShow = ({ setShowEditPopup, showToEdit, onEdit }) => {
                 handleInputChange={handleInputChange}
                 addLink={addLink}
                 addSeason={addSeason}
+                handleDeleteLink={handleDeleteLink}
               />
+              <div className="flex gap-2 flex-col md:flex-row">
+                <button
+                  type="submit"
+                  className="border-[1.5px] border-[#1D1C1C] text-white dark:border-[#FDFDFD] bg-[#1D1C1C] dark:bg-[#333438] rounded-xl font-medium text-sm px-12 py-2 flex gap-1 items-center justify-center"
+                >
+                  Submit
+                </button>
+              </div>
             </form>
           );
         })}

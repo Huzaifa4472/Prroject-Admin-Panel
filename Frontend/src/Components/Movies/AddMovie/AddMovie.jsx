@@ -7,7 +7,7 @@ import EditMovieDetails from "../EditMovies/EditMovieDetails";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-const AddMovie = ({ setShowAddTvShowPopup, setShowAddMovie, fetchData }) => {
+const AddMovie = ({ setShowAddTvShowPopup, setShowAddMovie }) => {
   const navigate = useNavigate();
   const initialValues = {
     "TMDB ID": "",
@@ -17,25 +17,6 @@ const AddMovie = ({ setShowAddTvShowPopup, setShowAddMovie, fetchData }) => {
   };
 
   const [shows, setShows] = useState([initialValues]);
-  const [expandedRow, setExpandedRow] = useState(null);
-
-  const handleExpandRow = (rowIndex) => {
-    setExpandedRow((prevRow) => (prevRow === rowIndex ? null : rowIndex));
-  };
-
-  const addLink = (showIndex) => {
-    setShows((prevShows) => {
-      const newShows = [...prevShows];
-      newShows[showIndex].links.push({
-        host: "",
-        quality: "",
-        size: "",
-        url: "",
-        id: uuidv4(),
-      });
-      return newShows;
-    });
-  };
 
   const handleInputChange = (event, showIndex, linkId, field) => {
     const { value } = event.target;
@@ -75,18 +56,38 @@ const AddMovie = ({ setShowAddTvShowPopup, setShowAddMovie, fetchData }) => {
       toast.success(
         `New movie (${shows[0].title}) with TMDB ID (${shows[0]["TMDB ID"]}) added successfully`
       );
-      fetchData();
-      setShowAddTvShowPopup(false);
       navigate("/Movies/All-movies");
     } catch (error) {
       toast.error(`Error: ${error.message}`);
     }
   };
 
+  const handleAddLink = (showIndex) => {
+    // Check if the last link is already an empty link
+    const lastLink = shows[showIndex].links[shows[showIndex].links.length - 1];
+    if (
+      !lastLink.host &&
+      !lastLink.quality &&
+      !lastLink.size &&
+      !lastLink.url
+    ) {
+      return;
+    }
+    const newShows = [...shows];
+    const newLink = {
+      host: "",
+      quality: "",
+      size: "",
+      url: "",
+      id: uuidv4(),
+    };
+    newShows[showIndex].links.push(newLink);
+    setShows(newShows);
+  };
+
   const handleDeleteLink = (showIndex, linkId) => {
     setShows((prevShows) => {
       const newShows = [...prevShows];
-      if (newShows[showIndex].links.length === 1) return newShows;
       newShows[showIndex].links = newShows[showIndex].links.filter(
         (link) => link.id !== linkId
       );
@@ -109,7 +110,7 @@ const AddMovie = ({ setShowAddTvShowPopup, setShowAddMovie, fetchData }) => {
               show={show}
               handleDeleteLink={handleDeleteLink}
               i={i}
-              addLink={addLink}
+              addLink={() => handleAddLink(i)} // Pass handleAddLink as a callback
               handleInputChange={handleInputChange}
             />
           </div>

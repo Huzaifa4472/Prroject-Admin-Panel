@@ -31,7 +31,7 @@ function AdminPanel() {
   };
 
   return (
-    <div className=" h-fit min-h-full w-[100%] lg:ml-0 px-2 md:px-6 py-4  ">
+    <div className=" h-fit md:mt-0 300px:mt-14 min-h-full w-[100%] lg:ml-0 px-2 md:px-6 py-4  ">
       <div className="flex flex-col gap-5 ">
         <Routes>
           <Route
@@ -79,13 +79,15 @@ function AdminPanel() {
               />
             }
           />
-          <Route path="/appconfig" 
-          
-          element={<AppConfig
-            configParams={configParams}
-            setConfigParams={setConfigParams}
-          />} />
-
+          <Route
+            path="/appconfig"
+            element={
+              <AppConfig
+                configParams={configParams}
+                setConfigParams={setConfigParams}
+              />
+            }
+          />
 
           <Route
             path="/App_Updater"
@@ -98,10 +100,12 @@ function AdminPanel() {
           />
           <Route
             path="/Play_Store_Apps_Checker"
-            element={<PlayStoreAppsChecker
-              configParams={configParams}
+            element={
+              <PlayStoreAppsChecker
+                configParams={configParams}
                 setConfigParams={setConfigParams}
-              />}
+              />
+            }
           />
         </Routes>
       </div>

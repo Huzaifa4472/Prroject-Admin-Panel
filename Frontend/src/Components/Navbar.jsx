@@ -1,32 +1,31 @@
-import { useContext, useEffect, useState } from 'react';
-import { getAuth, signOut } from 'firebase/auth';
-import { DarkModeContext } from '../context/darkModeContext.jsx';
-import { AuthContext } from '../context/AuthContext.jsx';
-import { useNavigate } from 'react-router-dom';
-import { IoIosSearch } from 'react-icons/io';
-import { GoBell } from 'react-icons/go';
-import { AiOutlineLogout } from 'react-icons/ai';
-import Avatar from '../assets/Avatar.png';
-import flag from '../assets/US-flag.png';
-import ToggleSidebar from './Sidebar/ToggleSidebar.jsx';
-import { toast } from 'react-toastify';
-import { FilteredDataContext } from '../context/FilteredDataContext';
+import { useContext, useEffect, useState } from "react";
+import { getAuth, signOut } from "firebase/auth";
+import { DarkModeContext } from "../context/darkModeContext.jsx";
+import { AuthContext } from "../context/AuthContext.jsx";
+import { useNavigate } from "react-router-dom";
+import { IoIosSearch } from "react-icons/io";
+import { GoBell } from "react-icons/go";
+import { AiOutlineLogout } from "react-icons/ai";
+import Avatar from "../assets/Avatar.png";
+import flag from "../assets/US-flag.png";
+import ToggleSidebar from "./Sidebar/ToggleSidebar.jsx";
+import { toast } from "react-toastify";
+import { FilteredDataContext } from "../context/FilteredDataContext";
 
-const Navbar = ({ onSearch }) => {
+const Navbar = ({ handleSearch }) => {
   const { dispatch } = useContext(AuthContext);
   const navigate = useNavigate();
-  const { handleSearch } = useContext(FilteredDataContext);
 
   const handleLogout = () => {
     const auth = getAuth();
     signOut(auth)
       .then(() => {
-        dispatch({ type: 'LOGOUT' });
-        navigate('/sign-in');
-        toast.success('Logout successful');
+        dispatch({ type: "LOGOUT" });
+        navigate("/sign-in");
+        toast.success("Logout successful");
       })
       .catch((error) => {
-        console.log('logout error');
+        console.log("logout error");
       });
   };
 

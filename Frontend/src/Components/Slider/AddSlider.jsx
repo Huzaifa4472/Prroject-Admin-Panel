@@ -95,8 +95,8 @@ const AddSlider = () => {
   };
 
   return (
-    <>
-      <div className="flex gap-4 justify-between flex-wrap my-8 items-start">
+    <div className=" min-h-screen">
+      <div className="flex gap-4 justify-between flex-wrap my-8  items-start">
         <h1 className=" text-black font-semibold text-2xl dark:text-[#FDFDFD]">
           Add Slider
         </h1>
@@ -156,7 +156,7 @@ const AddSlider = () => {
           </button>
         </div>
       </form> */}
-    </>
+    </div>
   );
 };
 

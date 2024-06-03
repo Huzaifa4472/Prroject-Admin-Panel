@@ -1,16 +1,16 @@
-import EditMoviePopupHeader from './EditMoviePopupHeader';
-import EditMovieDetails from './EditMovieDetails';
-import MovieTitleInputs from './MovieTitleInputs';
-import { useContext, useEffect, useState } from 'react';
-import { getDatabase, ref, onValue, update } from 'firebase/database';
-import { v4 as uuidv4 } from 'uuid';
-import { DarkModeContext } from '../../../context/darkModeContext';
-import { toast } from 'react-toastify';
+import EditMoviePopupHeader from "./EditMoviePopupHeader";
+import EditMovieDetails from "./EditMovieDetails";
+import MovieTitleInputs from "./MovieTitleInputs";
+import { useContext, useEffect, useState, useCallback } from "react";
+import { getDatabase, ref, onValue, update } from "firebase/database";
+import { v4 as uuidv4 } from "uuid";
+import { DarkModeContext } from "../../../context/darkModeContext";
+import { toast } from "react-toastify";
 
 const EditMovie = ({ setShowEditPopup, showToEdit }) => {
   const [shows, setShows] = useState([]);
   const db = getDatabase();
-  const starCountRef = ref(db, 'movies/' + showToEdit);
+  const starCountRef = ref(db, "movies/" + showToEdit);
   const { setOpen, setToastMessage } = useContext(DarkModeContext);
 
   useEffect(() => {
@@ -30,50 +30,80 @@ const EditMovie = ({ setShowEditPopup, showToEdit }) => {
             if (!data.id) {
               data.id = uuidv4();
             }
-            data['TMDB ID'] = showToEdit;
+            data["TMDB ID"] = showToEdit;
             setShows([data]);
           } else {
             setShows([]);
-            console.log('No data available');
+            console.log("No data available");
           }
         });
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
   }, [db, showToEdit]);
 
-  const addLink = (showIndex) => {
-    const newShows = [...shows];
-    newShows[showIndex].links.push({
-      host: '',
-      quality: '',
-      size: '',
-      url: '',
-      id: uuidv4(),
+  const handleDeleteLink = (showIndex, linkId) => {
+    setShows((prevShows) => {
+      const newShows = prevShows.map((show, index) => {
+        if (index === showIndex) {
+          return {
+            ...show,
+            links: show.links.filter((link) => link.id !== linkId),
+          };
+        }
+        return show;
+      });
+      return newShows;
     });
-    setShows(newShows);
   };
 
-  const handleInputChange = (event, rowIndex, linkId, field) => {
+  const addLink = useCallback((showIndex) => {
+    setShows((prevShows) => {
+      const newShows = prevShows.map((show, index) => {
+        if (index === showIndex) {
+          return {
+            ...show,
+            links: [
+              ...show.links,
+              {
+                id: uuidv4(),
+                host: "",
+                size: "",
+                quality: "",
+                url: "",
+              },
+            ],
+          };
+        }
+        return show;
+      });
+      return newShows;
+    });
+  }, []);
+
+  const handleInputChange = (event, showIndex, linkId, field) => {
     const { value } = event.target;
-    const newShows = [...shows];
-    const linkIndex = newShows[rowIndex].links.findIndex(
-      (link) => link.id === linkId
-    );
-    if (linkIndex !== -1) {
-      newShows[rowIndex].links[linkIndex][field] = value;
-    }
-    setShows(newShows);
+    setShows((prevShows) => {
+      const newShows = [...prevShows];
+      const show = newShows[showIndex];
+      const link = show.links.find((link) => link.id === linkId);
+      if (link) {
+        link[field] = value;
+      }
+      return newShows;
+    });
   };
 
   const handleUniqueInputChange = (i, event) => {
     const { name, value } = event.target;
-    const newShows = [...shows];
-    newShows[i] = { ...newShows[i], [name]: value };
-    setShows(newShows);
+    setShows((prevShows) => {
+      const newShows = [...prevShows];
+      newShows[i] = { ...newShows[i], [name]: value };
+      return newShows;
+    });
   };
 
   const handleSubmit = (event) => {
@@ -81,32 +111,23 @@ const EditMovie = ({ setShowEditPopup, showToEdit }) => {
 
     const db = getDatabase();
     const updates = {};
-    updates['movies/' + showToEdit] = null;
-    updates['movies/' + shows[0]['TMDB ID']] = shows[0];
+    updates["movies/" + showToEdit] = null;
+    updates["movies/" + shows[0]["TMDB ID"]] = shows[0];
 
-    const options = { timeZone: 'Asia/Dubai' };
-    updates['lastUpdated/time'] = new Date().toLocaleString('en-US', options);
+    const options = { timeZone: "Asia/Dubai" };
+    updates["lastUpdated/time"] = new Date().toLocaleString("en-US", options);
     update(ref(db), updates)
       .then(() => {
         setShowEditPopup(false);
-        toast.success(`TMDB ID (${shows[0]['TMDB ID']}) Updated Successfully`);
+        toast.success(`TMDB ID (${shows[0]["TMDB ID"]}) Updated Successfully`);
       })
       .catch((error) => {
-        console.error('Error updating data:', error);
+        console.error("Error updating data:", error);
       });
   };
 
-  const handleDeleteLink = (showIndex, specialId) => {
-    const updatedShows = [...shows];
-    const updatedLinks = updatedShows[showIndex].links.filter(
-      (link) => link.id !== specialId
-    );
-    updatedShows[showIndex].links = updatedLinks;
-    setShows(updatedShows);
-  };
-
   return (
-    <div className="fixed bg-[#D9D9D9B2] dark:bg-[#33343886] z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
+    <div className="fixed bg-[#d9d9d983] dark:bg-[#333438b6] z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
       <div className="bg-white dark:bg-[#0F0F0F] rounded-xl w-full md:w-4/5 lg:w-1/2">
         <EditMoviePopupHeader setShowEditPopup={setShowEditPopup} />
         <form onSubmit={handleSubmit}>

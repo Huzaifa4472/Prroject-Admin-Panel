@@ -9,7 +9,7 @@ import DashboardCard from "../DashboardCard";
 import AddMovie from "./AddMovie/AddMovie";
 import MovieShow from "./MovieShow";
 import { DarkModeContext } from "../../context/darkModeContext";
-
+import Navbar from "../Navbar";
 const TotalMovies = ({ setShowAddMovie, showAddMovie }) => {
   const [showAddTvShowPopup, setShowAddTvShowPopup] = useState(false);
   const [shows, setShows] = useState([]);
@@ -44,8 +44,6 @@ const TotalMovies = ({ setShowAddMovie, showAddMovie }) => {
               "TMDB ID": key,
               ...value,
             }));
-
-            console.log(data);
 
             const linksNo = arrayOfObjects.reduce((totalLinks, item) => {
               totalLinks += item.links?.length || 0;
@@ -85,8 +83,14 @@ const TotalMovies = ({ setShowAddMovie, showAddMovie }) => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
-  const handleSearch = (e) => {
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return function (...args) {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func.apply(this, args), delay);
+    };
+  };
+  const handleSearch = debounce((e) => {
     const allData = [...shows];
 
     const filter = allData.filter(
@@ -94,20 +98,13 @@ const TotalMovies = ({ setShowAddMovie, showAddMovie }) => {
         show["TMDB ID"].includes(e.target.value) ||
         show.title.toLowerCase().includes(e.target.value.toLowerCase())
     );
-    if (filter.length) {
-      setFilteredShows(filter);
-      setCurrentPage(1); // Reset to first page on search
-      return;
-    }
-    setFilteredShows(allData);
-    setCurrentPage(1); // Reset to first page on search
-  };
+    setFilteredShows(filter.length ? filter : []);
+  }, 300);
 
-  // Calculate the total pages for pagination
   const totalPages = Math.ceil(filteredShows.length / itemsPerPage);
-  console.log(fetchData);
   return (
     <div className="min-h-screen">
+      <Navbar handleSearch={handleSearch} />
       <h1 className="text-2xl font-semibold text-black dark:text-[#FDFDFD] mt-4 mb-12">
         All Movies:
       </h1>
@@ -123,17 +120,7 @@ const TotalMovies = ({ setShowAddMovie, showAddMovie }) => {
           icon={<HiMiniLink className="text-white" size={90} />}
         />
       </div>
-      <div className="flex justify-between flex-wrap gap-4 my-8">
-        <div className="bg-white dark:bg-[#333438] text-[#858585] dark:text-[#FDFDFD] flex items-center justify-between px-8 py-3 rounded-xl w-full md:w-[34%]">
-          <input
-            type="text"
-            onChange={(e) => handleSearch(e)}
-            placeholder="Search something"
-            className="outline-none placeholder:text-[13px] bg-transparent placeholder:text-[#858585] placeholder:font-normal w-full"
-          />
-          <RxDividerVertical />
-          <RiSearchLine />
-        </div>
+      <div className="flex justify-end flex-wrap gap-4 my-8">
         <button
           onClick={() => setShowAddTvShowPopup(true)}
           className="font-medium 600px:text-base 300px:text-sm flex items-center gap-2 bg-[#1D1C1C] dark:bg-[#333438] text-[#ffff] 600px:px-4 300px:px-3 600px:py-3 300px:py-2 rounded-xl"
@@ -150,15 +137,20 @@ const TotalMovies = ({ setShowAddMovie, showAddMovie }) => {
           />
         )}
       </div>
-      <MovieShow
-        shows={filteredShows}
-        currentPage={currentPage}
-        itemsPerPage={itemsPerPage}
-        setshowToEdit={setShowToEdit}
-        showToEdit={showToEdit}
-        filteredShows={filteredShows}
-      />
-      {/* Pagination controls */}
+      {filteredShows.length ? (
+        <MovieShow
+          filteredShows={filteredShows}
+          shows={filteredShows}
+          currentPage={currentPage}
+          itemsPerPage={itemsPerPage}
+          setshowToEdit={setShowToEdit}
+          showToEdit={showToEdit}
+        />
+      ) : (
+        <p className="text-center text-gray-500 dark:text-gray-400">
+          No item matches
+        </p>
+      )}
       <div className="flex justify-center my-4">
         <button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}

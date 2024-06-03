@@ -8,6 +8,7 @@ const SeasonDetails = ({
   handleInputChange,
   addLink,
   addSeason,
+  handleDeleteLink,
 }) => {
   return show?.seasons.map((season, id) => {
     return (
@@ -27,6 +28,7 @@ const SeasonDetails = ({
                   Episode {episodeId + 1}
                 </h2>
                 <button
+                  type="button"
                   onClick={() => addEpisode(i, id)}
                   className="border-[1.5px] border-[#1D1C1C] dark:bg-[#333438] dark:border-[#333438] text-black dark:text-[#FDFDFD] rounded-xl font-semibold text-base px-3 py-2 flex gap-1 items-center"
                 >
@@ -40,26 +42,19 @@ const SeasonDetails = ({
                 i={i}
                 addLink={addLink}
                 id={id}
+                handleDeleteLink={handleDeleteLink}
               />
             </>
           );
         })}
 
         <button
+          type="button"
           onClick={() => addSeason(i)}
           className="border-[1.5px] border-[#1D1C1C] dark:bg-[#333438] dark:border-[#FDFDFD] text-black dark:text-[#FDFDFD] rounded-xl font-medium text-sm my-8 px-3 py-2 flex gap-1 items-center"
         >
           <AiFillPlusCircle size={22} /> Add New Season
         </button>
-
-        <div className="flex gap-2 flex-col md:flex-row">
-          <button
-            type="submit"
-            className="border-[1.5px] border-[#1D1C1C] text-white dark:border-[#FDFDFD] bg-[#1D1C1C] dark:bg-[#333438] rounded-xl font-medium text-sm px-12 py-2 flex gap-1 items-center justify-center"
-          >
-            Submit
-          </button>
-        </div>
       </div>
     );
   });

@@ -2,13 +2,11 @@ import AddPopupHeader from "./AddPopupHeader";
 import { getDatabase, ref, set } from "firebase/database";
 import { v4 as uuidv4 } from "uuid";
 import { useContext, useState } from "react";
-import { DarkModeContext } from "../../../../context/darkModeContext";
 import TitleInputs from "../EditTvShow/TitleInputs";
 import EditSeasonDetails from "../EditTvShow/EditSeasonDetails";
 import { toast } from "react-toastify";
 
 const AddTvShow = ({ setShowAddTvShowPopup, setShowAddTv }) => {
-  const { setToastMessage, setOpen } = useContext(DarkModeContext);
   const initialValues = {
     "TMDB ID": "",
     title: "",
@@ -26,6 +24,7 @@ const AddTvShow = ({ setShowAddTvShowPopup, setShowAddTv }) => {
     id: uuidv4(),
   };
   const [shows, setShows] = useState([initialValues]);
+  console.log("🚀 ~ AddTvShow ~ shows:", shows);
 
   const addEpisode = (showIndex, id) => {
     const newShows = [...shows];
@@ -105,6 +104,19 @@ const AddTvShow = ({ setShowAddTvShowPopup, setShowAddTv }) => {
     setShows(updatedShows);
   };
 
+  const handleDeleteLink = (
+    showIndex,
+    episodeIndex,
+    linkIndex,
+    seasonIndex
+  ) => {
+    const newShows = [...shows];
+    newShows[showIndex].seasons[seasonIndex].episodes[
+      episodeIndex
+    ].links.splice(linkIndex, 1);
+    setShows(newShows);
+  };
+
   return (
     <div className="fixed bg-[#D9D9D9B2] dark:bg-[#33343886] z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
       <div className="bg-white dark:bg-[#0F0F0F] rounded-xl w-full md:w-4/5 lg:w-1/2">
@@ -124,7 +136,16 @@ const AddTvShow = ({ setShowAddTvShowPopup, setShowAddTv }) => {
                 handleInputChange={handleInputChange}
                 addLink={addLink}
                 addSeason={addSeason}
+                handleDeleteLink={handleDeleteLink}
               />
+              <div className="flex gap-2 flex-col md:flex-row">
+                <button
+                  type="submit"
+                  className="border-[1.5px] border-[#1D1C1C] text-white dark:border-[#FDFDFD] bg-[#1D1C1C] dark:bg-[#333438] rounded-xl font-medium text-sm px-12 py-2 flex gap-1 items-center justify-center"
+                >
+                  Submit
+                </button>
+              </div>
             </form>
           </div>
         ))}

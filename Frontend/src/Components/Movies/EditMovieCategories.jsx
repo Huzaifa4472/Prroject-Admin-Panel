@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { getDatabase, ref, onValue, set } from 'firebase/database';
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { TiDelete } from 'react-icons/ti';
+import { useCallback, useEffect, useRef, useState } from "react";
+import { getDatabase, ref, onValue, set } from "firebase/database";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { TiDelete } from "react-icons/ti";
+import { RiCheckLine } from "react-icons/ri"; // Import the check mark icon
 
 const EditMovieCategories = ({
   setShowEditMovieCategories,
@@ -13,19 +14,30 @@ const EditMovieCategories = ({
   const [sliders, setSliders] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [formData, setFormData] = useState({
-    title: initialData.title,
+    id: initialData.id,
     subtitle: initialData.subtitle,
     posterStyle: initialData.posterStyle,
     movieIds: initialData.movieIds || [],
   });
-  const [titleSearch, setTitleSearch] = useState('');
+  const [titleSearch, setTitleSearch] = useState("");
   const navigate = useNavigate();
   const formRef = useRef(null);
+  const dropdownRef = useRef(null);
+
+  const handleRemoveId = (id) => {
+    const updatedMovieIds = formData.movieIds.filter(
+      (movieId) => movieId !== id
+    );
+    setFormData((prev) => ({
+      ...prev,
+      movieIds: updatedMovieIds,
+    }));
+  };
 
   const fetchData = useCallback(() => {
     try {
       const db = getDatabase();
-      const starCountRef = ref(db, 'movies/');
+      const starCountRef = ref(db, "movies/");
       onValue(starCountRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
@@ -49,56 +61,60 @@ const EditMovieCategories = ({
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleIdSelect = (id) => {
     const selectedMovie = sliders.find((item) => item.id === id);
-    if (selectedMovie) {
-      setTitleSearch(selectedMovie.options);
-      setFormData((prev) => ({ ...prev, movieIds: [id] }));
-      document.getElementById('dropdown').classList.add('hidden');
+    if (selectedMovie && !formData.movieIds.includes(id)) {
+      const updatedMovieIds = [...formData.movieIds, id];
+      setFormData((prev) => ({
+        ...prev,
+        movieIds: updatedMovieIds,
+      }));
+      setTitleSearch(""); // Reset the titleSearch state
+      dropdownRef.current.classList.add("hidden");
     }
   };
 
   const handleManualIdInput = (e) => {
     setTitleSearch(e.target.value);
-  };
-
-  const handleBlur = () => {
-    const match = titleSearch.match(/\( (\d+) \)$/);
-    if (match) {
-      handleIdSelect(match[1]);
+    if (e.target.value) {
+      dropdownRef.current.classList.remove("hidden");
     } else {
-      setFormData((prev) => ({
-        ...prev,
-        movieIds: [...(prev.movieIds || []), titleSearch],
-      }));
+      dropdownRef.current.classList.add("hidden");
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setIsUpdating(true);
-    if (!formData.movieIds.length) return;
-    const { title, ...rest } = formData;
+    if (!formData.movieIds.length) {
+      toast.error("Please select at least one movie.");
+      setIsUpdating(false);
+      return;
+    }
     try {
       const db = getDatabase();
-      set(ref(db, 'categories/' + initialData.id), { ...rest, title });
-      const options = { timeZone: 'Asia/Dubai' };
-      set(
-        ref(db, 'lastUpdated/time'),
-        new Date().toLocaleString('en-US', options)
+      await set(ref(db, "categories/" + initialData.id), { ...formData });
+      const options = { timeZone: "Asia/Dubai" };
+      await set(
+        ref(db, "lastUpdated/time"),
+        new Date().toLocaleString("en-US", options)
       );
-      toast.success('Movie category updated successfully');
+      toast.success("Movie category updated successfully");
       onEditSuccess(); // Notify parent component of success
-      navigate('/Movies/movie-categories');
+      navigate("/Movies/movie-categories");
       setIsUpdating(false);
-      setTitleSearch('');
+      setTitleSearch("");
       formRef.current.reset();
-      setFormData({ title: '', subtitle: '', posterStyle: '', movieIds: [] });
+      setFormData({ id: "", subtitle: "", posterStyle: "", movieIds: [] });
     } catch (error) {
       console.log(error);
+      toast.error("An error occurred while updating the movie category.");
       setIsUpdating(false);
     }
   };
@@ -129,12 +145,12 @@ const EditMovieCategories = ({
             </label>
             <input
               type="text"
-              name="title"
+              name="id"
               className="text-slate-400 bg-transparent border w-full dark:text-[#FDFDFD] dark:placeholder:text-[#FDFDFD] px-3 rounded-lg p-3"
               required
               placeholder="Drama Movies"
               onChange={handleInputChange}
-              value={formData.title}
+              value={formData?.id || initialData.id}
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -163,45 +179,64 @@ const EditMovieCategories = ({
               onChange={handleInputChange}
               value={formData.posterStyle}
             >
-              <option className="text-slate-400" value="">
-                Select Poster Style
-              </option>
-              <option value="Large">Large</option>
-              <option value="Small">Small</option>
+              <optgroup className="bg-white dark:bg-black">
+                <option className="text-slate-400" value="">
+                  Select Poster Style
+                </option>
+                <option value="Large">Large</option>
+                <option value="Small">Small</option>
+              </optgroup>
             </select>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 z-[60]">
             <label className="text-black dark:text-[#FDFDFD] font-semibold">
               Movie TMDB ID
             </label>
-            <div className="relative w-full">
+            <div className="flex input-container items-center gap-2 relative max-w-[220px] border border-[#C8C8C8] px-3 rounded-lg overflow-x-auto h-[47px] bg-transparent overflow-scroll">
+              {formData.movieIds.map((id) => (
+                <div
+                  key={id}
+                  className="inline-flex items-center bg-gray-200 h-7 dark:bg-[#555555] px-1 rounded-lg"
+                >
+                  <span className="text-black dark:text-[#FDFDFD]">{id}</span>
+                  <TiDelete
+                    size={20}
+                    className="cursor-pointer"
+                    onClick={() => handleRemoveId(id)}
+                  />
+                </div>
+              ))}
               <input
                 type="text"
-                placeholder="Movies Available"
-                className="text-slate-400 dark:text-[#FDFDFD] bg-transparent dark:bg-[#333438] border border-[#C8C8C8] px-3 rounded-lg w-full py-3"
-                onFocus={() =>
-                  document.getElementById('dropdown').classList.remove('hidden')
-                }
+                name="titleSearch"
+                className="text-black dark:text-[#FDFDFD] min-w-[50%] bg-transparent focus:outline-none"
+                onFocus={() => dropdownRef.current.classList.remove("hidden")}
                 value={titleSearch}
                 onChange={handleManualIdInput}
-                onBlur={handleBlur}
-                required
+                required={!formData.movieIds.length}
               />
-              <div
-                id="dropdown"
-                className="dropdown-content hidden absolute w-full bg-white shadow-lg rounded-lg mt-1 max-h-60 overflow-auto"
-              >
-                {sliders?.map((item) => (
-                  <a
-                    key={item.id}
-                    href="#!"
-                    onClick={() => handleIdSelect(item.id)}
-                    className="block px-4 py-2 text-black hover:bg-gray-200"
-                  >
-                    {item.options}
-                  </a>
-                ))}
-              </div>
+            </div>
+            <div
+              ref={dropdownRef}
+              id="dropdown"
+              className="dropdown-content hidden absolute bg-white shadow-lg rounded-lg mt-1 max-h-60 overflow-auto z-50"
+            >
+              {sliders?.map((item) => (
+                <a
+                  key={item.id}
+                  href="#!"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    handleIdSelect(item.id);
+                  }}
+                  className="block px-4 py-2 text-black hover:bg-gray-200 relative"
+                >
+                  {item.options}
+                  {formData.movieIds.includes(item.id) && (
+                    <RiCheckLine className="absolute right-4 top-1/2 -translate-y-1/2 text-green-500" />
+                  )}
+                </a>
+              ))}
             </div>
           </div>
         </div>
