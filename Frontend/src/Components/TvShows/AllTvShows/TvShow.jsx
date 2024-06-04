@@ -46,7 +46,7 @@ const TvShow = ({ filteredShows }) => {
           className="bg-white dark:bg-[#333438] rounded-xl p-4 mb-4"
         >
           <div className="flex flex-wrap gap-4 justify-between items-center">
-            <div className="flex justify-between gap-4 flex-wrap items-center grow">
+            <div className="flex justify-start 750px:gap-8 500px:gap-4 300px:gap-2  flex-wrap items-center grow">
               <li className="list-none font-normal text-base text-[#46494F] dark:text-[#FDFDFD] ">
                 <span className="font-semibold text-[#000000] dark:text-[#FDFDFD] ">
                   TMDB ID
@@ -67,13 +67,13 @@ const TvShow = ({ filteredShows }) => {
               </li>
             </div>
 
-            <div className="flex justify-between grow gap-4 items-center">
+            <div className="flex justify-between 750px:gap-5 300px:gap-2 items-center">
               <button
                 onClick={() => {
                   setShowToEdit(show["TMDB ID"]);
                   setShowEditPopup(true);
                 }}
-                className="flex gap-1 rounded-xl justify-center items-center py-1 grow px-4 border border-[#0F172A] text-[#0F172A] dark:text-[#FDFDFD] dark:border-[#FDFDFD]  font-semibold text-sm"
+                className="flex gap-1 550px:rounded-xl 300px:rounded-lg justify-center items-center 550px:py-2 300px:py-1 px-3 border border-[#0F172A] text-[#0F172A] dark:text-[#FDFDFD] dark:border-[#FDFDFD]  font-semibold text-sm"
               >
                 <LiaEdit className="text-2xl" />
                 Edit
@@ -86,7 +86,7 @@ const TvShow = ({ filteredShows }) => {
                 />
               )}
               <button
-                className="flex gap-1 rounded-xl justify-center items-center py-1 grow px-4 border border-[#EC2626] text-[#EC2626] font-semibold text-sm"
+                className="flex gap-1 550px:rounded-xl 300px:rounded-lg items-center 550px:py-2 300px:py-1 550px:px-4 300px:px-1 border border-[#EC2626] text-[#EC2626] font-semibold text-sm"
                 onClick={() => {
                   setShowToDelete(show["TMDB ID"]);
                   setShowDeletePopup(true);

@@ -31,7 +31,7 @@ function AdminPanel() {
   };
 
   return (
-    <div className=" h-fit md:mt-0 300px:mt-14 min-h-full w-[100%] lg:ml-0 px-2 md:px-6 py-4  ">
+    <div className="lg:mt-0 300px:mt-16  min-h-[90%] w-[100%] lg:ml-0 px-2 md:px-6 py-4  ">
       <div className="flex flex-col gap-5 ">
         <Routes>
           <Route

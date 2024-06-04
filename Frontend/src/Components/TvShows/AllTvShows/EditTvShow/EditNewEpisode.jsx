@@ -1,4 +1,5 @@
 import { AiFillPlusCircle } from "react-icons/ai";
+import { MdOutlineDeleteOutline } from "react-icons/md";
 
 const EditNewEpisode = ({
   episode,
@@ -21,8 +22,18 @@ const EditNewEpisode = ({
     return (
       <div
         key={link.id}
-        className="border-[1px] border-[#C8C8C8] dark:border-[#FDFDFD] dark:bg-[#333438] bg-transparent rounded-2xl"
+        className="border-[1px] mb-5 border-[#C8C8C8] dark:border-[#FDFDFD]  bg-transparent rounded-2xl"
       >
+        {episode.links.length > 1 && (
+          <button
+            onClick={handleCancel}
+            type="button"
+            className=" font-semibold text-bas px-3 py-2 flex w-[100%] justify-end"
+          >
+            <MdOutlineDeleteOutline className="text-[#EC2626] text-2xl" />
+          </button>
+        )}
+
         <div className="flex flex-col md:grid grid-cols-1 md:grid-cols-3 break-words gap-4 p-4 my-2">
           <input
             defaultValue={link.host}
@@ -68,26 +79,15 @@ const EditNewEpisode = ({
             required
           />
         </div>
-        <div className="flex">
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              addLink(i, episodeId, id);
-            }}
-            className="border-[1.5px] border-[#1D1C1C] dark:border-[#FDFDFD] text-black dark:text-[#FDFDFD] rounded-xl font-semibold text-base m-4 px-3 py-2 flex gap-1 items-center"
-          >
-            <AiFillPlusCircle size={22} /> Add New Link
-          </button>
-          {episode.links.length > 1 && (
-            <button
-              onClick={handleCancel}
-              type="button"
-              className="border-[1.5px] border-[#1D1C1C] dark:border-[#FDFDFD] text-black dark:text-[#FDFDFD] rounded-xl font-semibold text-base m-4 px-3 py-2 flex gap-1 items-center"
-            >
-              Cancel
-            </button>
-          )}
-        </div>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            addLink(i, episodeId, id);
+          }}
+          className="border-[1.5px] border-[#1D1C1C] dark:border-[#FDFDFD] text-black dark:text-[#FDFDFD] rounded-xl font-semibold text-base m-4 px-3 py-2 flex gap-1 items-center"
+        >
+          <AiFillPlusCircle size={22} /> Add New Link
+        </button>
       </div>
     );
   });

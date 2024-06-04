@@ -245,7 +245,7 @@ const EditMovieCategories = ({
             disabled={!formData.movieIds.length}
             className="dark:border-[#FDFDFD] cursor-pointer bg-black border border-black px-4 py-2 text-white rounded-lg"
           >
-            Edit Movie Category
+            Save Changes
           </button>
         </div>
       </form>

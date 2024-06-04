@@ -71,7 +71,7 @@ const MovieShow = ({
                     setshowToEdit(show["TMDB ID"]);
                     setShowEditPopup(true);
                   }}
-                  className="flex gap-1 550px:rounded-xl 300px:rounded-lg items-center 550px:py-2 300px:py-1 550px:px-4 300px:px-1 border border-[#0F172A]  dark:border-[#FDFDFD]"
+                  className="flex gap-1 550px:rounded-xl 300px:rounded-lg items-center 550px:py-2 300px:py-1 px-4  border border-[#0F172A]  dark:border-[#FDFDFD]"
                 >
                   <span className="text-[#1D1C1C] dark:text-[#FDFDFD] text-2xl">
                     <LiaEdit />
@@ -91,7 +91,7 @@ const MovieShow = ({
                 </button>
                 <FaAngleUp
                   onClick={() => toggleShowMovie(show["TMDB ID"])}
-                  className={`text-[#858585] cursor-pointer 800px:text-3xl 500px:text-lg ${
+                  className={`text-[#858585] cursor-pointer text-3xl ${
                     showMovieStates[show["TMDB ID"]] ? "" : "rotate-180"
                   }`}
                 />

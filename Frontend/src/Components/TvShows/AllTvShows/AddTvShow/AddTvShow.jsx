@@ -118,8 +118,8 @@ const AddTvShow = ({ setShowAddTvShowPopup, setShowAddTv }) => {
   };
 
   return (
-    <div className="fixed bg-[#D9D9D9B2] dark:bg-[#33343886] z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
-      <div className="bg-white dark:bg-[#0F0F0F] rounded-xl w-full md:w-4/5 lg:w-1/2">
+    <div className="fixed bg-[#d9d9d939] dark:bg-[#33343886]  z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
+      <div className="bg-white dark:bg-[#0F0F0F] rounded-xl lg:mt-0 300px:mt-16 300px:max-h-[87%] 500px:max-h-[100%] overflow-scroll no-scrollbar w-full md:w-4/5 lg:w-1/2">
         <AddPopupHeader setShowAddTvShowPopup={setShowAddTvShowPopup} />
         {shows?.map((show, i) => (
           <div key={show.id} className="p-4 max-h-[90svh] overflow-auto">
@@ -141,7 +141,7 @@ const AddTvShow = ({ setShowAddTvShowPopup, setShowAddTv }) => {
               <div className="flex gap-2 flex-col md:flex-row">
                 <button
                   type="submit"
-                  className="border-[1.5px] border-[#1D1C1C] text-white dark:border-[#FDFDFD] bg-[#1D1C1C] dark:bg-[#333438] rounded-xl font-medium text-sm px-12 py-2 flex gap-1 items-center justify-center"
+                  className="border-[1.5px] border-[#1D1C1C] text-white dark:border-[#FDFDFD] bg-[#1D1C1C] dark:bg-[#333438] rounded-xl font-medium text-sm px-12 py-2 flex gap-1 items-center 300px:w-[50%] 500px:w-[25%] justify-center"
                 >
                   Submit
                 </button>

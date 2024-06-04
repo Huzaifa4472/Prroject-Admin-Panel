@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { configData } from '../../Data/configData';
-import { axiosInstance } from '../../axios';
-import { DarkModeContext } from '../../context/darkModeContext';
-import { toast } from 'react-toastify';
+import React, { useState, useEffect, useContext } from "react";
+import { configData } from "../../Data/configData";
+import { axiosInstance } from "../../axios";
+import { DarkModeContext } from "../../context/darkModeContext";
+import { toast } from "react-toastify";
 
 const AppConfig = ({ configParams, setConfigParams }) => {
-  console.log('configParams', configParams);
+  console.log("configParams", configParams);
 
   const { setToastMessage, setOpen } = useContext(DarkModeContext);
   const [checkedStates, setCheckedStates] = useState(
@@ -14,7 +14,7 @@ const AppConfig = ({ configParams, setConfigParams }) => {
   const [isLoading, setisLoading] = useState(false);
 
   useEffect(() => {
-    console.log('Initial configParams:', configParams);
+    console.log("Initial configParams:", configParams);
   }, [configParams]);
 
   const handleToggle = (index) => {
@@ -25,20 +25,20 @@ const AppConfig = ({ configParams, setConfigParams }) => {
 
   const handleParamChange = (e, paramName) => {
     const value =
-      e.target.type === 'checkbox'
+      e.target.type === "checkbox"
         ? e.target.checked.toString()
         : e.target.value;
 
     const updatedConfigParams = { ...configParams };
 
     if (
-      typeof updatedConfigParams.parameterGroups === 'object' &&
+      typeof updatedConfigParams.parameterGroups === "object" &&
       updatedConfigParams.parameterGroups !== null
     ) {
       updatedConfigParams.parameterGroups = Object.keys(
         updatedConfigParams.parameterGroups
       ).reduce((groups, groupId) => {
-        if (groupId === 'API/App Config') {
+        if (groupId === "API/App Config") {
           groups[groupId] = {
             ...updatedConfigParams.parameterGroups[groupId],
             parameters: {
@@ -66,18 +66,18 @@ const AppConfig = ({ configParams, setConfigParams }) => {
 
     e.preventDefault();
     try {
-      await axiosInstance.post('/remote-config', configParams);
+      await axiosInstance.post("/remote-config", configParams);
       setisLoading(false);
-      toast.success('App Configuration updated successfully', {});
+      toast.success("App Configuration updated successfully", {});
     } catch (error) {
-      console.error('Error updating Remote Config:', error);
+      console.error("Error updating Remote Config:", error);
       setisLoading(false);
       toast.error(`Error: ${error.message}`, {});
     }
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-[screen] ">
       <p className="text-black text-lg font-bold py-3 dark:text-[#FDFDFD]">
         App Configuration
       </p>
@@ -86,61 +86,61 @@ const AppConfig = ({ configParams, setConfigParams }) => {
           <div className=" bg-white dark:bg-[#333438] border shadow-lg border-[#ffffff1a] p-3 rounded-2xl">
             <div className="flex flex-col gap-2  ">
               {Object.keys(
-                configParams.parameterGroups['API/App Config'].parameters
+                configParams.parameterGroups["API/App Config"].parameters
               ).map((paramName) => (
                 <div
                   key={paramName}
                   className="flex items-center text-sm gap-14  lg:gap-20 text-[#000000] m-4 "
                 >
-                  {configParams.parameterGroups['API/App Config'].parameters[
+                  {configParams.parameterGroups["API/App Config"].parameters[
                     paramName
-                  ]?.valueType === 'STRING' ? (
+                  ]?.valueType === "STRING" ? (
                     <div className="flex flex-col gap-3 w-[100%] ">
                       <label className="text-sm font-medium dark:text-[#FDFDFD] text-[#363848]">
                         {
-                          configParams.parameterGroups['API/App Config']
+                          configParams.parameterGroups["API/App Config"]
                             .parameters[paramName]?.description
                         }
                       </label>
                       <input
                         type="text"
                         value={
-                          configParams.parameterGroups['API/App Config']
+                          configParams.parameterGroups["API/App Config"]
                             .parameters[paramName]?.defaultValue.value
                         }
                         onChange={(e) => handleParamChange(e, paramName)}
                         className="bg-transparent border dark:text-[#FDFDFD] font-light text-[#363848] w-[100%] rounded-lg p-2 "
                       />
                     </div>
-                  ) : configParams.parameterGroups['API/App Config'].parameters[
+                  ) : configParams.parameterGroups["API/App Config"].parameters[
                       paramName
-                    ]?.valueType === 'BOOLEAN' ? (
+                    ]?.valueType === "BOOLEAN" ? (
                     <div className="flex flex-row  items-center gap-4 w-[100%]">
                       <input
                         type="checkbox"
                         className="toggle toggle-md dark:text-[#FDFDFD] checked:bg-white bg-white"
                         onChange={(e) => handleParamChange(e, paramName)}
                         checked={
-                          configParams.parameterGroups['API/App Config']
+                          configParams.parameterGroups["API/App Config"]
                             .parameters[paramName]?.defaultValue.value ===
-                          'false'
+                          "false"
                             ? false
                             : true
                         }
                       />
                       <label className="w-[90%] text-sm font-medium dark:text-[#FDFDFD] text-[#363848]">
                         {
-                          configParams.parameterGroups['API/App Config']
+                          configParams.parameterGroups["API/App Config"]
                             .parameters[paramName]?.description
                         }
                       </label>
                     </div>
-                  ) : configParams.parameterGroups['API/App Config'].parameters[
+                  ) : configParams.parameterGroups["API/App Config"].parameters[
                       paramName
-                    ]?.valueType === 'JSON' ? (
-                    ''
+                    ]?.valueType === "JSON" ? (
+                    ""
                   ) : (
-                    ''
+                    ""
                   )}
                 </div>
               ))}

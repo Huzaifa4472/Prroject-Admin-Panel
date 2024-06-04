@@ -73,7 +73,7 @@ const DeleteMovies = ({ setShowDeletePopup, showToDelete, type }) => {
       });
   };
   return (
-    <div className="fixed bg-[#d9d9d983] dark:bg-[#333438b6] z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
+    <div className="fixed bg-[#d9d9d91d] dark:bg-[#33343837] z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
       <div className="bg-white dark:bg-[#333438] rounded-xl p-4">
         <h3 className="ml-0 text-left text-[#ED1111] font-semibold text-xl">
           Delete Movie

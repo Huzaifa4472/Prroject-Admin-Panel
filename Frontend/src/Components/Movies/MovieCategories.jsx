@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
-import { getDatabase, ref, onValue } from 'firebase/database';
-import { Link } from 'react-router-dom';
-import { IoIosAddCircle } from 'react-icons/io';
-import CatDeleteModal from './CatDeleteModal';
-import { MdOutlineDeleteOutline } from 'react-icons/md';
-import { LiaEdit } from 'react-icons/lia';
-import EditMovieCategories from './EditMovieCategories';
+import { useCallback, useEffect, useState } from "react";
+import { getDatabase, ref, onValue } from "firebase/database";
+import { Link } from "react-router-dom";
+import { IoIosAddCircle } from "react-icons/io";
+import CatDeleteModal from "./CatDeleteModal";
+import { MdOutlineDeleteOutline } from "react-icons/md";
+import { LiaEdit } from "react-icons/lia";
+import EditMovieCategories from "./EditMovieCategories";
 
 const MovieCategories = () => {
   const [categories, setCategories] = useState(null);
@@ -17,7 +17,7 @@ const MovieCategories = () => {
   const fetchData = useCallback(() => {
     setIsLoading(true);
     const db = getDatabase();
-    const categoriesRef = ref(db, 'categories/');
+    const categoriesRef = ref(db, "categories/");
     onValue(
       categoriesRef,
       (snapshot) => {
@@ -30,7 +30,7 @@ const MovieCategories = () => {
         setIsLoading(false);
       },
       (error) => {
-        console.error('Error fetching categories: ', error);
+        console.error("Error fetching categories: ", error);
         setIsLoading(false);
       }
     );
@@ -43,7 +43,7 @@ const MovieCategories = () => {
   const handleDelete = (id) => {
     setCatToDelete(id);
     setTimeout(() => {
-      document.getElementById('my_modal_6').showModal();
+      document.getElementById("my_modal_6").showModal();
     }, 200);
   };
 
@@ -59,7 +59,7 @@ const MovieCategories = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col py-5 ">
+    <div className="min-h-screen flex flex-col py-5 lg:mt-0 mt-11">
       {showEditMovieCategories && (
         <EditMovieCategories
           setShowEditMovieCategories={setShowEditMovieCategories}
@@ -67,10 +67,10 @@ const MovieCategories = () => {
           onEditSuccess={handleEditSuccess}
         />
       )}
-      <CatDeleteModal catToDelete={catToDelete || ''} type="categories" />
+      <CatDeleteModal catToDelete={catToDelete || ""} type="categories" />
       <div className="mb-12">
-        <div className="flex items-center justify-between">
-          <div className="text-black dark:text-[#FDFDFD] font-bold my-4 text-base sm:text-lg md:text-3xl">
+        <div className="flex 500px:items-center 300px:items-start 500px:flex-row 300px:flex-col justify-between w-[100%]  ">
+          <div className="text-black dark:text-[#FDFDFD] font-semibold my-4 text-3xl">
             Movie Categories
           </div>
           <Link
@@ -98,19 +98,19 @@ const MovieCategories = () => {
               </h1>
               <div className="flex gap-2 p-4 justify-center mb-auto">
                 <button
+                  onClick={() => handleEdit(id)}
+                  className="flex gap-1 rounded-xl items-center py-1 px-4 border border-[#0F172A] dark:border-[#FDFDFD] text-black dark:text-[#FDFDFD]"
+                >
+                  <LiaEdit className="text-xl dark:text-[#FDFDFD]" />
+                  Edit
+                </button>
+                <button
                   className="flex gap-1 rounded-xl items-center py-1 px-4 border border-[#EC2626] text-[#EC2626] font-semibold text-sm"
                   type="button"
                   onClick={() => handleDelete(id)}
                 >
                   <MdOutlineDeleteOutline fontSize="medium" />
                   Delete
-                </button>
-                <button
-                  onClick={() => handleEdit(id)}
-                  className="flex gap-1 rounded-xl items-center py-1 px-4 border border-[#0F172A] dark:border-[#FDFDFD] text-black dark:text-[#FDFDFD]"
-                >
-                  <LiaEdit className="text-xl dark:text-[#FDFDFD]" />
-                  Edit
                 </button>
               </div>
               <div className="bg-white dark:bg-[#333438] pt-4 overflow-hidden grid grid-cols-3 items-end w-full md:w-[220px] h-10 rounded-b-2x mt-auto mb-0 rounded-2xl">

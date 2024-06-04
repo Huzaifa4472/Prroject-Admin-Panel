@@ -1,12 +1,12 @@
-import { TiDelete } from 'react-icons/ti';
-import { useNavigate } from 'react-router-dom';
+import { TiDelete } from "react-icons/ti";
+import { useNavigate } from "react-router-dom";
 
 const AddPopupHeader = ({ setShowAddTvShowPopup }) => {
   const navigate = useNavigate();
   return (
     <div className="flex items-center justify-between w-[100%] text-white px-4 py-3 bg-[#1D1C1C] rounded-t-xl">
       <h1 className=" text-2xl  font-semibold">Add Tv Show</h1>
-      {window.location.pathname.includes('/TV-shows/Add-TvShow') ? (
+      {window.location.pathname.includes("/TV-shows/Add-TvShow") ? (
         <button
           onClick={() => {
             navigate(-1);

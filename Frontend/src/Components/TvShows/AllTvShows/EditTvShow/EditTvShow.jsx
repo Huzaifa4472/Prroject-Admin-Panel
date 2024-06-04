@@ -143,7 +143,7 @@ const EditTvShow = ({ setShowEditPopup, showToEdit, onEdit }) => {
 
   return (
     <div className="fixed bg-[#d9d9d90b] dark:bg-[#3334380a] z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
-      <div className="bg-white dark:bg-[#0F0F0F] rounded-xl w-full md:w-4/5 lg:w-1/2">
+      <div className="bg-white dark:bg-[#0F0F0F] rounded-xl lg:mt-0 300px:mt-16 300px:max-h-[80%] 500px:max-h-[90%] overflow-scroll no-scrollbar w-full md:w-3/5 lg:w-1/2">
         <EditPopupHeader
           setShowEditPopup={setShowEditPopup}
           title="Edit Tv Show"
@@ -153,7 +153,7 @@ const EditTvShow = ({ setShowEditPopup, showToEdit, onEdit }) => {
             <form
               onSubmit={handleSubmit}
               key={show.id}
-              className="p-4 max-h-[90svh] overflow-auto"
+              className="p-4 max-h-[90svh] overflow-auto flex flex-col "
             >
               <TitleInputs
                 show={show}
@@ -172,7 +172,7 @@ const EditTvShow = ({ setShowEditPopup, showToEdit, onEdit }) => {
               <div className="flex gap-2 flex-col md:flex-row">
                 <button
                   type="submit"
-                  className="border-[1.5px] border-[#1D1C1C] text-white dark:border-[#FDFDFD] bg-[#1D1C1C] dark:bg-[#333438] rounded-xl font-medium text-sm px-12 py-2 flex gap-1 items-center justify-center"
+                  className="border-[1.5px] border-[#1D1C1C] text-white dark:border-[#FDFDFD] bg-[#1D1C1C] dark:bg-[#333438] rounded-xl font-medium text-sm px-12 py-2 flex gap-1 md:w-[25%] 500px:w-[30%] 300px:w-[40%] items-center justify-center"
                 >
                   Submit
                 </button>

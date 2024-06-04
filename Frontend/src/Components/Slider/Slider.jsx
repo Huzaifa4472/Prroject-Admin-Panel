@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Slider = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen lg:mt-0 mt-11">
       <div className="flex gap-4 justify-between flex-wrap my-8 items-start ">
         <h1 className=" text-black font-semibold text-2xl dark:text-[#FDFDFD]">
           Movies Slider

@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { getDatabase, ref, onValue, set } from 'firebase/database';
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { TiDelete } from 'react-icons/ti';
-import { RiCheckLine } from 'react-icons/ri'; // Import the check mark icon
+import { useCallback, useEffect, useRef, useState } from "react";
+import { getDatabase, ref, onValue, set } from "firebase/database";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { TiDelete } from "react-icons/ti";
+import { RiCheckLine } from "react-icons/ri"; // Import the check mark icon
 
 const EditTvShowsCategories = ({
   setShowEditTvShowCategories,
@@ -18,25 +18,25 @@ const EditTvShowsCategories = ({
     posterStyle: initialData.posterStyle,
     showIds: initialData.showIds || [],
   });
-  const [titleSearch, setTitleSearch] = useState('');
+  const [titleSearch, setTitleSearch] = useState("");
   const formRef = useRef(null);
   const dropdownRef = useRef(null);
   console.log(initialData);
   useEffect(() => {
     const { id, subtitle, posterStyle, showIds } = initialData;
     setFormData({
-      id: id || '',
-      subtitle: subtitle || '',
-      posterStyle: posterStyle || '',
+      id: id || "",
+      subtitle: subtitle || "",
+      posterStyle: posterStyle || "",
       showIds: showIds || [],
     });
-    setTitleSearch(''); // Reset titleSearch when component re-renders
+    setTitleSearch(""); // Reset titleSearch when component re-renders
   }, [initialData]);
 
   const fetchData = useCallback(() => {
     try {
       const db = getDatabase();
-      const starCountRef = ref(db, 'shows/');
+      const starCountRef = ref(db, "shows/");
       onValue(starCountRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
@@ -71,14 +71,14 @@ const EditTvShowsCategories = ({
         ...prev,
         showIds: updatedShowIds,
       }));
-      setTitleSearch(''); // Clear the search field after selection
-      dropdownRef.current.classList.add('hidden');
+      setTitleSearch(""); // Clear the search field after selection
+      dropdownRef.current.classList.add("hidden");
     }
   };
 
   const handleManualIdInput = (e) => {
     setTitleSearch(e.target.value);
-    dropdownRef.current.classList.remove('hidden');
+    dropdownRef.current.classList.remove("hidden");
   };
 
   const handleBlur = () => {
@@ -102,13 +102,13 @@ const EditTvShowsCategories = ({
     if (!formData.showIds.length) return;
     try {
       const db = getDatabase();
-      set(ref(db, 'tvcategories/' + initialData.id), { ...formData });
-      const options = { timeZone: 'Asia/Dubai' };
+      set(ref(db, "tvcategories/" + initialData.id), { ...formData });
+      const options = { timeZone: "Asia/Dubai" };
       set(
-        ref(db, 'lastUpdated/time'),
-        new Date().toLocaleString('en-US', options)
+        ref(db, "lastUpdated/time"),
+        new Date().toLocaleString("en-US", options)
       );
-      toast.success('Tv shows category updated successfully');
+      toast.success("Tv shows category updated successfully");
       onUpdate(); // Call the onUpdate prop to refresh the data in the parent component
       setShowEditTvShowCategories(false);
     } catch (error) {
@@ -117,7 +117,7 @@ const EditTvShowsCategories = ({
   };
 
   return (
-    <div className="fixed bg-[#D9D9D9B2] dark:bg-[#33343886] z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
+    <div className="fixed bg-[#d9d9d91f] dark:bg-[#3334383e] z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
       <form
         ref={formRef}
         onSubmit={handleSubmit}
@@ -133,7 +133,7 @@ const EditTvShowsCategories = ({
             onClick={() => setShowEditTvShowCategories(false)}
           />
         </div>
-        <div className="grid grid-cols-2 gap-12 border border-[#ffffff1a] p-3 rounded-lg w-full">
+        <div className="grid grid-cols-2 md:gap-10 gap-4  p-3  w-full">
           <div className="flex flex-col gap-2">
             <label className="text-black dark:text-[#FDFDFD] font-semibold">
               Title
@@ -205,7 +205,7 @@ const EditTvShowsCategories = ({
                 className="text-black dark:text-[#FDFDFD] min-w-[50%]   bg-transparent focus:outline-none"
                 value={titleSearch}
                 onChange={handleManualIdInput}
-                onFocus={() => dropdownRef.current.classList.remove('hidden')}
+                onFocus={() => dropdownRef.current.classList.remove("hidden")}
               />
             </div>
             <div
@@ -222,8 +222,8 @@ const EditTvShowsCategories = ({
                   }}
                   className={`block px-4 py-2 text-black dark:text-[#FDFDFD] dark:hover:bg-[#333438] hover:bg-gray-200 ${
                     formData.showIds.includes(item.id)
-                      ? 'bg-gray-200 dark:bg-[#555555]'
-                      : ''
+                      ? "bg-gray-200 dark:bg-[#555555]"
+                      : ""
                   }`}
                 >
                   {item.options}

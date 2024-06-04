@@ -114,14 +114,14 @@ const AddMovieCategory = ({ setShowAddMovie, showAddMovie }) => {
   };
 
   return (
-    <div className="min-h-screen flex px-4 md:px-6 flex-col py-5 sm:py-8">
+    <div className="min-h-screen flex px-4 md:px-6 lg:mt-0 300px:mt-14 flex-col py-5 sm:py-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-black font-semibold dark:text-[#FDFDFD] my-4 text-2xl">
+        <h1 className="my-4 font-semibold dark:text-[#FDFDFD] text-[black] sm:text-lg md:text-2xl 300px: text-lg">
           Add Movie Category
         </h1>
         <button
           onClick={() => navigate("/Movies/movie-categories")}
-          className="text-white bg-[black] dark:border-[#FDFDFD] py-1 px-4 rounded-lg"
+          className="text-white bg-[black] font-medium dark:border-[#FDFDFD] py-1 px-4 rounded-lg"
         >
           Back
         </button>
@@ -131,7 +131,7 @@ const AddMovieCategory = ({ setShowAddMovie, showAddMovie }) => {
         onSubmit={handleSubmit}
         className="flex flex-col gap-4"
       >
-        <div className="grid grid-cols-2 gap-12 border border-[#ffffff1a] bg-white dark:bg-[#33343886] p-3 rounded-lg w-full">
+        <div className="grid md:grid-cols-2  gap-12 border dark:border-gray-700 bg-white dark:bg-[#33343886] p-4 rounded-lg w-full">
           <div className="flex flex-col gap-2">
             <label className="text-black dark:text-[#FDFDFD] font-semibold">
               Title

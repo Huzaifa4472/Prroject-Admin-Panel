@@ -122,10 +122,10 @@ const AllTvShows = ({ showAddTv, setShowAddTv }) => {
           icon={<HiMiniLink className="text-white" size={90} />}
         />
       </div>
-      <div className="flex gap-4 justify-end md:flex-row flex-col my-8">
+      <div className="flex gap-4  justify-end my-8">
         <button
           onClick={() => setShowAddTvShowPopup(true)}
-          className="font-medium text-base  flex items-center gap-2 bg-[#1D1C1C] dark:bg-[#333438] text-[#ffff] px-4 py-3 rounded-xl"
+          className="font-medium text-base  flex items-center gap-2 bg-[#1D1C1C] dark:bg-[#333438] text-[#ffff] px-4 py-2 rounded-xl"
         >
           <AiFillPlusCircle size={22} />
           <p className="font-medium text-base">Add New Show</p>
