@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 
@@ -68,6 +68,7 @@ const EditMovieDetails = React.memo(
             </div>
           </div>
         ))}
+
         <button
           type="button"
           onClick={() => addLink(i)}

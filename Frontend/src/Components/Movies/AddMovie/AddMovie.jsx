@@ -75,7 +75,7 @@ const AddMovie = ({ setShowAddTvShowPopup, setShowAddMovie }) => {
       !lastLink.size &&
       !lastLink.url
     ) {
-      return;
+      return toast.error("Please fill in all the input fields first.");
     }
     const newShows = [...shows];
     const newLink = {
