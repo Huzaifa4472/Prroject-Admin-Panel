@@ -126,7 +126,7 @@ const EditTvShowsCategories = ({
   };
 
   return (
-    <div className="fixed bg-[#d9d9d91f] dark:bg-[#3334383e] z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
+    <div className="fixed bg-[#d9d9d96c] dark:bg-[#3334386a] z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
       <form
         ref={formRef}
         onSubmit={handleSubmit}

@@ -120,7 +120,7 @@ const EditMovieCategories = ({
   };
 
   return (
-    <div className="fixed bg-[#D9D9D9B2] dark:bg-[#33343886] z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
+    <div className="fixed bg-[#d9d9d96c] dark:bg-[#333438a0] z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
       <form
         ref={formRef}
         onSubmit={handleSubmit}

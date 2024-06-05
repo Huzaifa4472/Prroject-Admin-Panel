@@ -127,7 +127,7 @@ const AddTvShow = ({ setShowAddTvShowPopup, setShowAddTv }) => {
     setShows(newShows);
   };
   return (
-    <div className="fixed bg-[#d9d9d939] dark:bg-[#33343886]  z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
+    <div className="fixed bg-[#d9d9d96c] dark:bg-[#333438a0]  z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
       <div className="bg-white dark:bg-[#0F0F0F] rounded-xl lg:mt-0 300px:mt-16 300px:max-h-[87%] 500px:max-h-[100%] overflow-scroll no-scrollbar w-full md:w-4/5 lg:w-1/2">
         <AddPopupHeader setShowAddTvShowPopup={setShowAddTvShowPopup} />
         {shows?.map((show, i) => (
