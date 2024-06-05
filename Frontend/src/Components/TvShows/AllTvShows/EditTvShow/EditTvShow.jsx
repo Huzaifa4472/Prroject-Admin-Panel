@@ -142,7 +142,17 @@ const EditTvShow = ({ setShowEditPopup, showToEdit, onEdit }) => {
     ].links.splice(linkIndex, 1);
     setShows(newShows);
   };
+  const deleteEpisode = (showIndex, seasonIndex, episodeIndex) => {
+    const newShows = [...shows];
+    newShows[showIndex].seasons[seasonIndex].episodes.splice(episodeIndex, 1);
+    setShows(newShows);
+  };
 
+  const deleteSeason = (showIndex, seasonIndex) => {
+    const newShows = [...shows];
+    newShows[showIndex].seasons.splice(seasonIndex, 1);
+    setShows(newShows);
+  };
   return (
     <div className="fixed bg-[#d9d9d90b] dark:bg-[#3334380a] z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
       <div className="bg-white dark:bg-[#0F0F0F] rounded-xl lg:mt-0 300px:mt-16 300px:max-h-[80%] 500px:max-h-[90%] overflow-scroll no-scrollbar w-full md:w-3/5 lg:w-1/2">
@@ -170,6 +180,8 @@ const EditTvShow = ({ setShowEditPopup, showToEdit, onEdit }) => {
                 addLink={addLink}
                 addSeason={addSeason}
                 handleDeleteLink={handleDeleteLink}
+                deleteEpisode={deleteEpisode}
+                deleteSeason={deleteSeason}
               />
               <div className="flex gap-2 flex-col md:flex-row">
                 <button
