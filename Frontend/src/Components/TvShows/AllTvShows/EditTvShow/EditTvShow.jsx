@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import EditPopupHeader from "./EditPopupHeader";
 import EditSeasonDetails from "./EditSeasonDetails";
 import TitleInputs from "./TitleInputs";
+import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { getDatabase, ref, onValue, update } from "firebase/database";
 import { DarkModeContext } from "../../../../context/darkModeContext";
@@ -12,7 +13,7 @@ const EditTvShow = ({ setShowEditPopup, showToEdit, onEdit }) => {
   const db = getDatabase();
   const starCountRef = ref(db, "shows/" + showToEdit);
   const { setOpen, setToastMessage } = useContext(DarkModeContext);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchData = () => {
       let updateData;
@@ -102,6 +103,7 @@ const EditTvShow = ({ setShowEditPopup, showToEdit, onEdit }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    navigate("/TvShows/All-TvShows");
     const db = getDatabase();
     const updates = {};
     updates["shows/" + showToEdit] = null;

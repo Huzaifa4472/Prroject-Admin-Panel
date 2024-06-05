@@ -10,7 +10,7 @@ const AddNewMovie = () => {
         <input
           type="text"
           className="border-[1px] border-[#C8C8C8] rounded-lg px-3 py-2 text-[#1D1C1C] text-base font-normal grow outline-none placeholder:text-base"
-          placeholder="Host 1"
+          placeholder="Host"
           required
         />
         <input

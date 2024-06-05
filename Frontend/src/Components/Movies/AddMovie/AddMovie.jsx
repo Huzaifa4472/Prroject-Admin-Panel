@@ -15,8 +15,8 @@ const AddMovie = ({ setShowAddTvShowPopup, setShowAddMovie }) => {
     links: [{ host: "", quality: "", size: "", url: "", id: uuidv4() }],
     id: uuidv4(),
   };
-
   const [shows, setShows] = useState([initialValues]);
+  const [showPopup, setShowPopup] = useState(true); // State to control popup visibility
 
   const handleInputChange = (event, showIndex, linkId, field) => {
     const { value } = event.target;
@@ -39,10 +39,8 @@ const AddMovie = ({ setShowAddTvShowPopup, setShowAddMovie }) => {
     });
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    // Check if TMDB ID and title are empty
+  const handleSubmit = async () => {
+    navigate("/Movies/All-movies");
     if (!shows[0]["TMDB ID"].trim() || !shows[0].title.trim()) {
       toast.error("TMDB ID and title are required");
       return;
@@ -53,7 +51,7 @@ const AddMovie = ({ setShowAddTvShowPopup, setShowAddMovie }) => {
     try {
       await set(ref(db, "movies/" + showId), {
         ...shows[0],
-        createdAt: Date.now(), // Adding createdAt timestamp
+        createdAt: Date.now(),
       });
       const options = { timeZone: "Asia/Dubai" };
       await set(
@@ -63,14 +61,13 @@ const AddMovie = ({ setShowAddTvShowPopup, setShowAddMovie }) => {
       toast.success(
         `New movie (${shows[0].title}) with TMDB ID (${shows[0]["TMDB ID"]}) added successfully`
       );
-      navigate("/Movies/All-movies");
+      setShowPopup(false); // Hide the popup after successful form submission
     } catch (error) {
       toast.error(`Error: ${error.message}`);
     }
   };
 
   const handleAddLink = (showIndex) => {
-    // Check if the last link is already an empty link
     const lastLink = shows[showIndex].links[shows[showIndex].links.length - 1];
     if (
       !lastLink.host &&
@@ -103,35 +100,44 @@ const AddMovie = ({ setShowAddTvShowPopup, setShowAddMovie }) => {
   };
 
   return (
-    <div className="fixed bg-[#d9d9d939] dark:bg-[#33343886]  z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
-      <div className="bg-white dark:bg-[#0F0F0F] rounded-xl lg:mt-0 300px:mt-16 300px:max-h-[80%] 500px:max-h-[90%] overflow-scroll no-scrollbar w-full md:w-3/5 lg:w-1/2">
-        <AddMoviePopupHeader setShowAddTvShowPopup={setShowAddTvShowPopup} />
-        {shows.map((show, i) => (
-          <div key={show.id} className="p-4 max-h-[90svh] overflow-auto">
-            <MovieTitleInputs
-              i={i}
-              show={show}
-              handleUniqueInputChange={handleUniqueInputChange}
-            />
-            <EditMovieDetails
-              show={show}
-              handleDeleteLink={handleDeleteLink}
-              i={i}
-              addLink={() => handleAddLink(i)} // Pass handleAddLink as a callback
-              handleInputChange={handleInputChange}
-            />
-          </div>
-        ))}
-        <div className="p-4">
-          <button
-            onClick={handleSubmit}
-            className="border-[1.5px] border-[#1D1C1C] text-white dark:text-[#FDFDFD] dark:border-[#FDFDFD] bg-[#1D1C1C] rounded-xl font-medium text-sm px-12 py-2 flex gap-1 items-center"
+    <>
+      {showPopup && (
+        <div className="fixed bg-[#d9d9d939] dark:bg-[#33343886]  z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
+          <form
+            onSubmit={handleSubmit}
+            className="bg-white dark:bg-[#0F0F0F] rounded-xl lg:mt-0 300px:mt-16 300px:max-h-[80%] 500px:max-h-[90%] overflow-scroll no-scrollbar w-full md:w-3/5 lg:w-1/2"
           >
-            Submit
-          </button>
+            <AddMoviePopupHeader
+              setShowAddTvShowPopup={setShowAddTvShowPopup}
+            />
+            {shows.map((show, i) => (
+              <div key={show.id} className="p-4 max-h-[90svh] overflow-auto">
+                <MovieTitleInputs
+                  i={i}
+                  show={show}
+                  handleUniqueInputChange={handleUniqueInputChange}
+                />
+                <EditMovieDetails
+                  show={show}
+                  handleDeleteLink={handleDeleteLink}
+                  i={i}
+                  addLink={() => handleAddLink(i)}
+                  handleInputChange={handleInputChange}
+                />
+              </div>
+            ))}
+            <div className="p-4">
+              <button
+                type="submit"
+                className="border-[1.5px] border-[#1D1C1C] text-white dark:text-[#FDFDFD] dark:border-[#FDFDFD] bg-[#1D1C1C] rounded-xl font-medium text-sm px-12 py-2 flex gap-1 items-center"
+              >
+                Submit
+              </button>
+            </div>
+          </form>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

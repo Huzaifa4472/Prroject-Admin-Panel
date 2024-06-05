@@ -24,15 +24,20 @@ const EditNewEpisode = ({
         key={link.id}
         className="border-[1px] mb-5 border-[#C8C8C8] dark:border-[#FDFDFD]  bg-transparent rounded-2xl"
       >
-        {episode.links.length > 1 && (
-          <button
-            onClick={handleCancel}
-            type="button"
-            className=" font-semibold text-bas px-3 py-2 flex w-[100%] justify-end"
-          >
-            <MdOutlineDeleteOutline className="text-[#EC2626] text-2xl" />
-          </button>
-        )}
+        <div className="flex flex-row mt-3 px-4 justify-between">
+          <h1 className="text-lg font-medium dark:text-[#FDFDFD] ">
+            Link {linkId + 1}
+          </h1>
+          {episode.links.length > 1 && (
+            <button
+              onClick={handleCancel}
+              type="button"
+              className=" font-semibold text-bas px-3 py-2 flex  justify-end"
+            >
+              <MdOutlineDeleteOutline className="text-[#EC2626] text-2xl" />
+            </button>
+          )}
+        </div>
 
         <div className="flex flex-col md:grid grid-cols-1 md:grid-cols-3 break-words gap-4 p-4 my-2">
           <input

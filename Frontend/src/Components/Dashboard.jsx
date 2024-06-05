@@ -1,22 +1,22 @@
-import { useCallback, useEffect, useState } from 'react';
-import { getDatabase, ref, onValue } from 'firebase/database';
-import { MdAddCircleOutline, MdOutlineDesktopWindows } from 'react-icons/md';
-import { PiFilmReelBold } from 'react-icons/pi';
-import DashboardCard from './DashboardCard';
+import { useCallback, useEffect, useState } from "react";
+import { getDatabase, ref, onValue } from "firebase/database";
+import { MdAddCircleOutline, MdOutlineDesktopWindows } from "react-icons/md";
+import { PiFilmReelBold } from "react-icons/pi";
+import DashboardCard from "./DashboardCard";
 
 const Dashboard = () => {
   const db = getDatabase();
   const [totalMovies, setTotalMovies] = useState(0);
   const [totalShows, settotalShows] = useState(0);
   const fetchMovies = useCallback(() => {
-    const starCountRef = ref(db, 'movies/');
+    const starCountRef = ref(db, "movies/");
 
     try {
       onValue(starCountRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
           const arrayOfObjects = Object.keys(data).map((key) => ({
-            'TMDB ID': key,
+            "TMDB ID": key,
             ...data[key],
           }));
 
@@ -30,14 +30,14 @@ const Dashboard = () => {
     }
   }, [db]);
   const fetchShows = useCallback(() => {
-    const starCountRef = ref(db, 'shows/');
+    const starCountRef = ref(db, "shows/");
 
     try {
       onValue(starCountRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
           const arrayOfObjects = Object.keys(data).map((key) => ({
-            'TMDB ID': key,
+            "TMDB ID": key,
             ...data[key],
           }));
 
@@ -56,7 +56,7 @@ const Dashboard = () => {
   }, [fetchMovies, fetchShows]);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen lg:mt-0 mt-16 ">
       <h1 className="text-2xl font-semibold text-black dark:text-[#FDFDFD] mt-4 mb-12">
         Dashboard
       </h1>

@@ -9,7 +9,7 @@ const EditMovieDetails = React.memo(
         return (
           <MdOutlineDeleteOutline
             onClick={() => handleDeleteLink(i, linkId)}
-            className="flex w-[10%] text-lg text-red-500 items-center cursor-pointer"
+            className="  text-lg text-red-500  cursor-pointer"
           />
         );
       }
@@ -20,11 +20,11 @@ const EditMovieDetails = React.memo(
       <>
         {show?.links?.map((link, linkId) => (
           <div key={link.id} className="my-8">
-            <h1 className="text-lg font-medium dark:text-[#FDFDFD]">
-              Link {linkId + 1}
-            </h1>
             <div className="border-[1px] border-[#C8C8C8] rounded-2xl">
-              <div className="flex justify-end w-[100%] mt-2">
+              <div className="flex justify-between w-[100%] mt-2 px-4">
+                <h1 className="text-lg font-medium dark:text-[#FDFDFD]">
+                  Link {linkId + 1}
+                </h1>
                 {renderDeleteButton(link.id)}
               </div>
               <div className="flex flex-col md:grid grid-cols-1 md:grid-cols-3 break-words gap-4 p-4 my-2">
