@@ -15,7 +15,7 @@ const CatDeleteModal = ({ catToDelete, type }) => {
       .catch((error) => {});
   };
   return catToDelete ? (
-    <dialog id="my_modal_6" className="modal  modal-middle sm:modal-middle">
+    <div className="fixed bg-[#d9d9d96c] dark:bg-[#333438a0] z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
       <div className="modal-box bg-white dark:bg-[#1D1E22]">
         <h3 className="ml-0 text-left text-[#ED1111] font-semibold text-xl">
           Delete {type === "shows" ? "TV Show" : "Movie"}
@@ -25,12 +25,12 @@ const CatDeleteModal = ({ catToDelete, type }) => {
           <span className="font-bold"> {catToDelete} </span> Category!
         </p>
         <div className="modal-action">
-          <form method="dialog" className="flex gap-2 items-center">
+          <form className="flex gap-2 items-center">
             <button className="py-2 px-5 rounded-xl text-black dark:text-white bg-transparent duration-150 ease-in-out border dark:border-white border-[#1D1E22]">
               Close
             </button>
             <button
-              className=" py-2 px-5 rounded-xl text-normal text-black dark:text-white bg-transparent border dark:border-white border-[#1D1E22]"
+              className=" py-2 px-5 rounded-xl text-normal text-black dark:text-white bg-transparent duration-150 ease-in-out border dark:border-white border-[#1D1E22]"
               onClick={() => handleDelete(catToDelete)}
             >
               Confirm
@@ -38,7 +38,7 @@ const CatDeleteModal = ({ catToDelete, type }) => {
           </form>
         </div>
       </div>
-    </dialog>
+    </div>
   ) : (
     ""
   );

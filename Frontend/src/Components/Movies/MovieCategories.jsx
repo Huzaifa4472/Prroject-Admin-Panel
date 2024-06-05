@@ -105,11 +105,11 @@ const MovieCategories = () => {
                   Edit
                 </button>
                 <button
-                  className="flex gap-1 rounded-xl items-center py-1 px-4 border border-[#EC2626] text-[#EC2626] font-semibold text-sm"
+                  className="flex gap-1 rounded-xl items-center py-1 px-4 border border-[#EC2626] text-[#EC2626] font-semibold "
                   type="button"
                   onClick={() => handleDelete(id)}
                 >
-                  <MdOutlineDeleteOutline fontSize="medium" />
+                  <MdOutlineDeleteOutline className="text-xl " />
                   Delete
                 </button>
               </div>
