@@ -21,7 +21,23 @@ const EditTvShowsCategories = ({
   const [titleSearch, setTitleSearch] = useState("");
   const formRef = useRef(null);
   const dropdownRef = useRef(null);
-  console.log(initialData);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        !event.target.closest(".input-container")
+      ) {
+        dropdownRef.current.classList.add("hidden");
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
   useEffect(() => {
     const { id, subtitle, posterStyle, showIds } = initialData;
     setFormData({
@@ -79,13 +95,6 @@ const EditTvShowsCategories = ({
   const handleManualIdInput = (e) => {
     setTitleSearch(e.target.value);
     dropdownRef.current.classList.remove("hidden");
-  };
-
-  const handleBlur = () => {
-    const match = titleSearch.match(/\( (\d+) \)$/);
-    if (match) {
-      handleIdSelect(match[1]);
-    }
   };
 
   const handleRemoveId = (id) => {

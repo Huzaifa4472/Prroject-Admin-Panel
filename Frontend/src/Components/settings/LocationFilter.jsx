@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { axiosInstance } from '../../axios';
-import { toast } from 'react-toastify';
+import { useState } from "react";
+import { axiosInstance } from "../../axios";
+import { toast } from "react-toastify";
 
-function LocationFilter({ configParams, setConfigParams }) {
+function LocationFilter({ configParams, setConfigParams, setOpen }) {
   const [isLoading, setisLoading] = useState(false);
   const handleParamChange = (e, paramName) => {
     const value =
-      e.target.type === 'checkbox'
+      e.target.type === "checkbox"
         ? e.target.checked.toString()
         : e.target.value;
 
@@ -15,14 +15,14 @@ function LocationFilter({ configParams, setConfigParams }) {
 
     // Check if parameterGroups is an object (instead of an array)
     if (
-      typeof updatedConfigParams.parameterGroups === 'object' &&
+      typeof updatedConfigParams.parameterGroups === "object" &&
       updatedConfigParams.parameterGroups !== null
     ) {
       // Update the specific parameters within the parameterGroups
       updatedConfigParams.parameterGroups = Object.keys(
         updatedConfigParams.parameterGroups
       ).reduce((groups, groupId) => {
-        if (groupId === 'Location Filter') {
+        if (groupId === "Location Filter") {
           // Update parameters within the Location Filter group
           groups[groupId] = {
             ...updatedConfigParams.parameterGroups[groupId],
@@ -52,12 +52,12 @@ function LocationFilter({ configParams, setConfigParams }) {
 
     e.preventDefault();
     try {
-      await axiosInstance.post('/remote-config', configParams);
+      await axiosInstance.post("/remote-config", configParams);
       setisLoading(false);
-      toast.success('Location Settings updated successfully');
+      toast.success("Location Settings updated successfully");
       setOpen(true);
     } catch (error) {
-      console.error('Error updating Remote Config:', error);
+      console.error("Error updating Remote Config:", error);
       setisLoading(false);
       toast.error(`${error.message}`);
       setOpen(true);
@@ -81,60 +81,60 @@ function LocationFilter({ configParams, setConfigParams }) {
           <div className="bg-white dark:bg-[#333438] dark:text-[#FDFDFD] dark:border-[#FDFDFD]   shadow-lg border border-[#ffffff1a]  p-3 rounded-lg">
             <div className="flex flex-col text-black gap-2">
               {Object.keys(
-                configParams.parameterGroups['Location Filter'].parameters
+                configParams.parameterGroups["Location Filter"].parameters
               ).map((paramName) => (
                 <div
                   key={paramName}
                   className="flex items-center text-sm gap-14 my-2"
                 >
-                  {configParams.parameterGroups['Location Filter'].parameters[
+                  {configParams.parameterGroups["Location Filter"].parameters[
                     paramName
-                  ]?.valueType === 'STRING' ? (
+                  ]?.valueType === "STRING" ? (
                     <div className="flex flex-col w-full gap-3 dark:text-[#FDFDFD]">
                       <label className="">
                         {
-                          configParams.parameterGroups['Location Filter']
+                          configParams.parameterGroups["Location Filter"]
                             .parameters[paramName]?.description
                         }
                       </label>
                       <input
                         type="text"
                         value={
-                          configParams.parameterGroups['Location Filter']
+                          configParams.parameterGroups["Location Filter"]
                             .parameters[paramName]?.defaultValue.value
                         }
                         onChange={(e) => handleParamChange(e, paramName)}
                         className="bg-[#ebedef] bg-transparent border dark:text-[#FDFDFD] text-[#858585]  rounded-lg p-2 w-full"
                       />
                     </div>
-                  ) : configParams.parameterGroups['Location Filter']
-                      .parameters[paramName]?.valueType === 'BOOLEAN' ? (
+                  ) : configParams.parameterGroups["Location Filter"]
+                      .parameters[paramName]?.valueType === "BOOLEAN" ? (
                     <div className="flex flex-row gap-4 items-center">
                       <input
                         type="checkbox"
                         className="toggle toggle-md checked:bg-white dark:text-[#FDFDFD] bg-white w-full"
                         onChange={(e) => handleParamChange(e, paramName)}
                         checked={
-                          configParams.parameterGroups['Location Filter']
+                          configParams.parameterGroups["Location Filter"]
                             .parameters[paramName]?.defaultValue.value ===
-                          'false'
+                          "false"
                             ? false
                             : true
                         }
                       />
                       <label className="dark:text-[#FDFDFD]">
                         {
-                          configParams.parameterGroups['Location Filter']
+                          configParams.parameterGroups["Location Filter"]
                             .parameters[paramName]?.description
                         }
                       </label>
                     </div>
-                  ) : configParams.parameterGroups['Location Filter']
-                      .parameters[paramName]?.valueType === 'JSON' ? (
+                  ) : configParams.parameterGroups["Location Filter"]
+                      .parameters[paramName]?.valueType === "JSON" ? (
                     <select>
                       {JSON.parse(
-                        configParams.parameterGroups['Location Filter']
-                          .parameters['location_blacklist']?.defaultValue.value
+                        configParams.parameterGroups["Location Filter"]
+                          .parameters["location_blacklist"]?.defaultValue.value
                       ).countries.map((country) => (
                         <option key={country} value={country}>
                           {country}
@@ -142,7 +142,7 @@ function LocationFilter({ configParams, setConfigParams }) {
                       ))}
                     </select>
                   ) : (
-                    ''
+                    ""
                   )}
                 </div>
               ))}

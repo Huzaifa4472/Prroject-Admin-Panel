@@ -41,6 +41,13 @@ const AddMovie = ({ setShowAddTvShowPopup, setShowAddMovie }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    // Check if TMDB ID and title are empty
+    if (!shows[0]["TMDB ID"].trim() || !shows[0].title.trim()) {
+      toast.error("TMDB ID and title are required");
+      return;
+    }
+
     const db = getDatabase();
     const showId = shows[0]["TMDB ID"];
     try {

@@ -13,6 +13,8 @@ import { axiosInstance } from "../../axios";
 
 function AdminPanel() {
   const [configParams, setConfigParams] = useState();
+  const [open, setOpen] = useState(false); // Define setOpen
+
   const location = useLocation();
   useEffect(() => {
     console.log("here");
@@ -25,6 +27,7 @@ function AdminPanel() {
       const data = await response.data;
       console.log(response);
       setConfigParams(data);
+      setOpen(true);
     } catch (error) {
       console.error("Error fetching Remote Config:", error.message);
     }
@@ -58,6 +61,7 @@ function AdminPanel() {
               <LocationFilter
                 configParams={configParams}
                 setConfigParams={setConfigParams}
+                setOpen={setOpen}
               />
             }
           />
