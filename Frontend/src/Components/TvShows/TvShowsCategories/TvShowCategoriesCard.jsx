@@ -2,7 +2,6 @@ import { MdOutlineDeleteOutline } from "react-icons/md";
 import { LiaEdit } from "react-icons/lia";
 import { useCallback, useEffect, useState } from "react";
 import { getDatabase, ref, onValue } from "firebase/database";
-import { Link } from "react-router-dom";
 import EditTvShowsCategories from "./EditTvShowsCategories";
 import DeleteTvShow from "../AllTvShows/DeleteTvShow/DeleteTvShow";
 import GrayCircles from "./GrayCircles";
@@ -39,11 +38,14 @@ const TvShowCategoriesCard = () => {
       }
     );
   }, []);
+  console.log("slider data", sliders);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
+  useEffect(() => {
+    console.log("sliders:", sliders);
+  }, [sliders]);
   const handleDelete = (categoryId) => {
     setSliders((prevSliders) => {
       const updatedSliders = { ...prevSliders };
@@ -73,7 +75,7 @@ const TvShowCategoriesCard = () => {
         className="w-full md:w-[220px] shadow-lg rounded-2xl bg-white dark:bg-[#333438]"
       >
         <h1 className="my-3 px-4 text-center font-semibold text-xl text-black dark:text-[#FDFDFD]">
-          {sliders[id].subtitle}
+          {id}
         </h1>
         <div className="flex gap-2 p-4 justify-center">
           <button

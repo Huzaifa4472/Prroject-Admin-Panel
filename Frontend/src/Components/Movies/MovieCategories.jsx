@@ -35,6 +35,7 @@ const MovieCategories = () => {
       }
     );
   }, []);
+  console.log("catgories data", categories);
 
   useEffect(() => {
     fetchData();
@@ -94,7 +95,7 @@ const MovieCategories = () => {
               className="w-full md:w-[220px] shadow-lg rounded-2xl bg-white dark:bg-[#333438] flex flex-col"
             >
               <h1 className="my-3 px-4 text-center font-semibold text-xl text-black dark:text-[#FDFDFD]">
-                {categories[id].subtitle}
+                {id}
               </h1>
               <div className="flex gap-2 p-4 justify-center mb-auto">
                 <button
