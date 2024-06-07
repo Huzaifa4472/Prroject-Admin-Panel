@@ -13,11 +13,10 @@ import { axiosInstance } from "../../axios";
 
 function AdminPanel() {
   const [configParams, setConfigParams] = useState();
-  const [open, setOpen] = useState(false); // Define setOpen
+  const [open, setOpen] = useState(false);
 
   const location = useLocation();
   useEffect(() => {
-    console.log("here");
     fetchRemoteConfig();
   }, [location.pathname]);
 
@@ -25,7 +24,6 @@ function AdminPanel() {
     try {
       const response = await axiosInstance.get("/remote-config");
       const data = await response.data;
-      console.log(response);
       setConfigParams(data);
       setOpen(true);
     } catch (error) {
@@ -80,6 +78,7 @@ function AdminPanel() {
               <InAppAnnouncement
                 configParams={configParams}
                 setConfigParams={setConfigParams}
+                setOpen={setOpen}
               />
             }
           />

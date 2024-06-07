@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { axiosInstance } from '../../axios';
-import { toast } from 'react-toastify';
+import { useState } from "react";
+import { axiosInstance } from "../../axios";
+import { toast } from "react-toastify";
 
 function AdsSetting({ configParams, setConfigParams }) {
   const [isLoading, setisLoading] = useState(false);
   const handleParamChange = (e, paramName, groupId) => {
     const value =
-      e.target.type === 'checkbox'
+      e.target.type === "checkbox"
         ? e.target.checked.toString()
         : e.target.value;
 
@@ -44,11 +44,11 @@ function AdsSetting({ configParams, setConfigParams }) {
 
     e.preventDefault();
     try {
-      await axiosInstance.post('/remote-config', configParams);
+      await axiosInstance.post("/remote-config", configParams);
       setisLoading(false);
-      toast.success('Ads Settings updated successfully');
+      toast.success("Ads Settings updated successfully");
     } catch (error) {
-      console.error('Error updating Remote Config:', error);
+      console.error("Error updating Remote Config:", error);
       setisLoading(false);
       toast.error(`Error: ${error.message}`);
     }
@@ -69,7 +69,7 @@ function AdsSetting({ configParams, setConfigParams }) {
       {configParams?.parameterGroups ? (
         <form className="flex flex-col gap-5">
           {Object.keys(configParams.parameterGroups).map((groupId) => {
-            if (groupId.toLowerCase().includes('ads')) {
+            if (groupId.toLowerCase().includes("ads")) {
               return (
                 <div
                   key={groupId}
@@ -87,7 +87,7 @@ function AdsSetting({ configParams, setConfigParams }) {
                     >
                       {configParams.parameterGroups[groupId].parameters[
                         paramName
-                      ]?.valueType === 'STRING' ? (
+                      ]?.valueType === "STRING" ? (
                         <div className=" flex flex-col  w-[1000%] gap-4">
                           <label className=" text-black dark:text-[#FDFDFD] font-medium">
                             {
@@ -111,7 +111,7 @@ function AdsSetting({ configParams, setConfigParams }) {
                         </div>
                       ) : configParams.parameterGroups[groupId].parameters[
                           paramName
-                        ]?.valueType === 'BOOLEAN' ? (
+                        ]?.valueType === "BOOLEAN" ? (
                         <div className=" flex flex-row items-center w-[100%] gap-4">
                           <input
                             type="checkbox"
@@ -122,7 +122,7 @@ function AdsSetting({ configParams, setConfigParams }) {
                             checked={
                               configParams.parameterGroups[groupId].parameters[
                                 paramName
-                              ]?.defaultValue.value === 'false'
+                              ]?.defaultValue.value === "false"
                                 ? false
                                 : true
                             }
@@ -136,7 +136,7 @@ function AdsSetting({ configParams, setConfigParams }) {
                           </label>
                         </div>
                       ) : (
-                        ''
+                        ""
                       )}
                     </div>
                   ))}
@@ -148,7 +148,7 @@ function AdsSetting({ configParams, setConfigParams }) {
           })}
           <div className="flex flex-wrap gap-5">
             <button
-              className="bg-slate-950 dark:text-[#FDFDFD] dark:border-[#FDFDFD] px-4  rounded-2xl  text-white  font-semibold py-2 sm:text-base text-sm border border-black w-fit  self-end"
+              className="bg-slate-950 dark:text-[#FDFDFD] dark:border-[#FDFDFD] px-6  rounded-2xl  text-white  font-semibold py-2 sm:text-base text-sm border border-black w-fit  self-end"
               onClick={handleUpdateConfig}
             >
               Update Ads Settings

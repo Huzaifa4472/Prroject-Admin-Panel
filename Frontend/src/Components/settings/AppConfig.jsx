@@ -148,7 +148,7 @@ const AppConfig = ({ configParams, setConfigParams }) => {
           </div>
           <div className="flex flex-wrap gap-8">
             <button
-              className="bg-slate-950  hover:bg-transparent transition-all duration-150 ease-in-out px-4  rounded-2xl text-white hover:text-black font-semibold py-2 sm:text-base text-sm border dark:text-[#FDFDFD] dark:border-[#FDFDFD]  border-black w-fit btn self-end"
+              className="bg-slate-950 transition-all duration-150 ease-in-out px-4  rounded-2xl text-white  font-semibold py-2 sm:text-base text-sm border dark:text-[#FDFDFD] dark:border-[#FDFDFD] w-fit  self-end"
               onClick={handleUpdateConfig}
             >
               Update App Configuration

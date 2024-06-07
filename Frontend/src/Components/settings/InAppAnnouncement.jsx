@@ -1,34 +1,29 @@
-import { useState, useEffect } from 'react';
-import { axiosInstance } from '../../axios';
-import { useContext } from 'react';
-import { DarkModeContext } from '../../context/darkModeContext';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useState, useEffect } from "react";
+import { axiosInstance } from "../../axios";
+import { useContext } from "react";
+import { DarkModeContext } from "../../context/darkModeContext";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-function InAppAnnouncement({ configParams, setConfigParams }) {
-  const { setToastMessage, setOpen } = useContext(DarkModeContext);
+function InAppAnnouncement({ configParams, setConfigParams, setOpen }) {
+  const { setToastMessage } = useContext(DarkModeContext);
   const [isLoading, setisLoading] = useState(false);
 
   const handleParamChange = (e, paramName) => {
     const value =
-      e.target.type === 'checkbox'
+      e.target.type === "checkbox"
         ? e.target.checked.toString()
         : e.target.value;
-
-    // Copy the entire configParams object
     const updatedConfigParams = { ...configParams };
 
-    // Check if parameterGroups is an object (instead of an array)
     if (
-      typeof updatedConfigParams.parameterGroups === 'object' &&
+      typeof updatedConfigParams.parameterGroups === "object" &&
       updatedConfigParams.parameterGroups !== null
     ) {
-      // Update the specific parameters within the parameterGroups
       updatedConfigParams.parameterGroups = Object.keys(
         updatedConfigParams.parameterGroups
       ).reduce((groups, groupId) => {
-        if (groupId === 'In-App Announcement') {
-          // Update parameters within the In-App Announcement group
+        if (groupId === "In-App Announcement") {
           groups[groupId] = {
             ...updatedConfigParams.parameterGroups[groupId],
             parameters: {
@@ -48,26 +43,34 @@ function InAppAnnouncement({ configParams, setConfigParams }) {
       }, {});
     }
 
-    // Set the updated configParams object
     setConfigParams(updatedConfigParams);
   };
 
   const handleUpdateConfig = async (e) => {
+    e.preventDefault();
     setisLoading(true);
 
-    e.preventDefault();
+    console.log(
+      "Updating config with payload:",
+      JSON.stringify(configParams, null, 2)
+    );
+
     try {
-      await axiosInstance.post('/remote-config', configParams);
-      setisLoading(false);
-      toast.success('In App Announcement updated successfully');
+      const response = await axiosInstance.post("/remote-config", configParams);
+      console.log("Server response:", response);
+      toast.success("In App Announcement updated successfully");
       setOpen(true);
     } catch (error) {
-      console.error('Error updating Remote Config:', error);
+      console.error(
+        "Error updating Remote Config:",
+        error.response?.data || error.message
+      );
+      toast.error(`Error: ${error.response?.data || error.message}`);
+    } finally {
       setisLoading(false);
-      toast.reduce(`${error.message}`);
-      setOpen(true);
     }
   };
+
   if (isLoading) {
     return (
       <div>
@@ -88,55 +91,55 @@ function InAppAnnouncement({ configParams, setConfigParams }) {
           <div className="dark:bg-[#333438] bg-white border border-[#ffffff1a] dark:text-[#FDFDFD] p-3 rounded-lg  ">
             <div className="flex flex-col gap-2  ">
               {Object.keys(
-                configParams.parameterGroups['In-App Announcement'].parameters
+                configParams.parameterGroups["In-App Announcement"].parameters
               ).map((paramName) => (
                 <div
                   key={paramName}
                   className="flex flex-col gap-14 lg:gap-5 font-normal text-black text-sm my-2"
                 >
-                  {configParams.parameterGroups['In-App Announcement']
-                    .parameters[paramName]?.valueType === 'STRING' ? (
+                  {configParams.parameterGroups["In-App Announcement"]
+                    .parameters[paramName]?.valueType === "STRING" ? (
                     <div className="flex flex-col gap-4">
                       <label className="dark:text-[#FDFDFD]">
                         {
-                          configParams.parameterGroups['In-App Announcement']
+                          configParams.parameterGroups["In-App Announcement"]
                             .parameters[paramName]?.description
                         }
                       </label>
                       <input
                         type="text"
                         value={
-                          configParams.parameterGroups['In-App Announcement']
+                          configParams.parameterGroups["In-App Announcement"]
                             .parameters[paramName]?.defaultValue.value
                         }
                         onChange={(e) => handleParamChange(e, paramName)}
                         className="bg-[#ebedef] bg-transparent border text-[#858585] dark:text-[#FDFDFD] w-[90%] rounded-lg p-2 dark:bg-[#333438]"
                       />
                     </div>
-                  ) : configParams.parameterGroups['In-App Announcement']
-                      .parameters[paramName]?.valueType === 'BOOLEAN' ? (
+                  ) : configParams.parameterGroups["In-App Announcement"]
+                      .parameters[paramName]?.valueType === "BOOLEAN" ? (
                     <div className="flex items-center gap-4 font-medium text-black text-sm">
                       <input
                         type="checkbox"
                         className="toggle toggle-md checked:bg-white bg-white border"
                         onChange={(e) => handleParamChange(e, paramName)}
                         checked={
-                          configParams.parameterGroups['In-App Announcement']
+                          configParams.parameterGroups["In-App Announcement"]
                             .parameters[paramName]?.defaultValue.value ===
-                          'false'
+                          "false"
                             ? false
                             : true
                         }
                       />
                       <label className="w-full dark:text-[#FDFDFD]">
                         {
-                          configParams.parameterGroups['In-App Announcement']
+                          configParams.parameterGroups["In-App Announcement"]
                             .parameters[paramName]?.description
                         }
                       </label>
                     </div>
                   ) : (
-                    ''
+                    ""
                   )}
                 </div>
               ))}

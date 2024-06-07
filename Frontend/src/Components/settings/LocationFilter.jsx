@@ -78,7 +78,7 @@ function LocationFilter({ configParams, setConfigParams, setOpen }) {
       </p>
       {configParams?.parameterGroups ? (
         <form className="flex flex-col gap-7">
-          <div className="bg-white dark:bg-[#333438] dark:text-[#FDFDFD] dark:border-[#FDFDFD]   shadow-lg border border-[#ffffff1a]  p-3 rounded-lg">
+          <div className="bg-white dark:bg-[#333438] dark:text-[#FDFDFD]   shadow-lg border border-[#ffffff1a]  p-3 rounded-lg">
             <div className="flex flex-col text-black gap-2">
               {Object.keys(
                 configParams.parameterGroups["Location Filter"].parameters

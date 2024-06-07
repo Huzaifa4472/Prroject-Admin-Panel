@@ -1,6 +1,6 @@
-import { toast } from 'react-toastify';
-import { axiosInstance } from '../../axios';
-import { useState } from 'react';
+import { toast } from "react-toastify";
+import { axiosInstance } from "../../axios";
+import { useState } from "react";
 
 function AppUpdator({ configParams, setConfigParams }) {
   const [isLoading, setisLoading] = useState(false);
@@ -12,8 +12,8 @@ function AppUpdator({ configParams, setConfigParams }) {
       updatedConfigParams.parameters.app_updater.defaultValue.value
     );
 
-    if (paramName === 'releaseNotes') {
-      defaultValue[0][paramName] = value.split(',');
+    if (paramName === "releaseNotes") {
+      defaultValue[0][paramName] = value.split(",");
     } else {
       defaultValue[0][paramName] = value;
     }
@@ -28,12 +28,12 @@ function AppUpdator({ configParams, setConfigParams }) {
     e.preventDefault();
     setisLoading(true);
     try {
-      await axiosInstance.post('/remote-config', configParams);
+      await axiosInstance.post("/remote-config", configParams);
       setisLoading(false);
-      toast.success('App Update settings updated successfully');
+      toast.success("App Update settings updated successfully");
       setOpen(true);
     } catch (error) {
-      console.error('Error updating Remote Config:', error);
+      console.error("Error updating Remote Config:", error);
       setisLoading(false);
       toast.error(`${error.message}`);
       setOpen(true);
@@ -55,10 +55,10 @@ function AppUpdator({ configParams, setConfigParams }) {
       </p>
       {configParams ? (
         <form className="flex flex-col gap-7">
-          <div className=" bg-white  dark:bg-[#333438] dark:text-[#FDFDFD] dark:border-[#FDFDFD] border shadow-lg border-[#ffffff1a]  p-3 rounded-lg">
+          <div className=" bg-white  dark:bg-[#333438] dark:text-[#FDFDFD]  border shadow-lg border-[#ffffff1a]  p-3 rounded-lg">
             <div className="flex flex-col gap-2">
               {JSON.parse(
-                configParams.parameters['app_updater'].defaultValue.value
+                configParams.parameters["app_updater"].defaultValue.value
               ).map((paramName) => (
                 <div
                   key="app_updater"
@@ -73,8 +73,8 @@ function AppUpdator({ configParams, setConfigParams }) {
                     </label>
                     <input
                       type="text"
-                      value={paramName['latestVersion']}
-                      onChange={(e) => handleParamChange(e, 'latestVersion')}
+                      value={paramName["latestVersion"]}
+                      onChange={(e) => handleParamChange(e, "latestVersion")}
                       className="bg-transparent border dark:text-[#FDFDFD] rounded-lg p-2  "
                     />
                   </div>
@@ -87,9 +87,9 @@ function AppUpdator({ configParams, setConfigParams }) {
                     </label>
                     <input
                       type="text"
-                      value={paramName['latestVersionCode']}
+                      value={paramName["latestVersionCode"]}
                       onChange={(e) =>
-                        handleParamChange(e, 'latestVersionCode')
+                        handleParamChange(e, "latestVersionCode")
                       }
                       className="bg-transparent border dark:text-[#FDFDFD] rounded-lg p-2 "
                     />
@@ -98,8 +98,8 @@ function AppUpdator({ configParams, setConfigParams }) {
                     <label className="dark:text-[#FDFDFD]">Url</label>
                     <input
                       type="text"
-                      value={paramName['url']}
-                      onChange={(e) => handleParamChange(e, 'url')}
+                      value={paramName["url"]}
+                      onChange={(e) => handleParamChange(e, "url")}
                       className="bg-transparent border dark:text-[#FDFDFD] rounded-lg p-2 "
                     />
                   </div>
@@ -111,9 +111,9 @@ function AppUpdator({ configParams, setConfigParams }) {
                       Release Notes:
                     </label>
                     <textarea
-                      value={paramName['releaseNotes'].join(',')}
+                      value={paramName["releaseNotes"].join(",")}
                       className=" bg-transparent border  rounded-lg p-2  min-h-[200px] h-auto dark:text-[#FDFDFD]"
-                      onChange={(e) => handleParamChange(e, 'releaseNotes')}
+                      onChange={(e) => handleParamChange(e, "releaseNotes")}
                     ></textarea>
                     <span className="text-xs text-red-500">
                       *Note:put comma (,) for a new line.*
