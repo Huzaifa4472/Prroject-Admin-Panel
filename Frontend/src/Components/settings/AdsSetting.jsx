@@ -2,7 +2,7 @@ import { useState } from "react";
 import { axiosInstance } from "../../axios";
 import { toast } from "react-toastify";
 
-function AdsSetting({ configParams, setConfigParams }) {
+function AdsSetting({ configParams, fetchRemoteConfig, setConfigParams }) {
   const [isLoading, setisLoading] = useState(false);
   const handleParamChange = (e, paramName, groupId) => {
     const value =
@@ -10,30 +10,24 @@ function AdsSetting({ configParams, setConfigParams }) {
         ? e.target.checked.toString()
         : e.target.value;
 
-    // Copy configParams and parameterGroups
     const updatedConfigParams = { ...configParams };
     const updatedParameterGroups = { ...updatedConfigParams.parameterGroups };
 
-    // Check if the groupId exists in parameterGroups
     if (updatedParameterGroups[groupId]) {
-      // Copy parameters for the current group
       const updatedParameters = {
         ...updatedParameterGroups[groupId].parameters,
       };
 
-      // Update the specific parameter value
       updatedParameters[paramName] = {
         ...updatedParameters[paramName],
         defaultValue: { value: value },
       };
 
-      // Update parameters for the current group
       updatedParameterGroups[groupId] = {
         ...updatedParameterGroups[groupId],
         parameters: updatedParameters,
       };
 
-      // Update configParams with the updated parameterGroups
       updatedConfigParams.parameterGroups = updatedParameterGroups;
       setConfigParams(updatedConfigParams);
     }
@@ -47,6 +41,7 @@ function AdsSetting({ configParams, setConfigParams }) {
       await axiosInstance.post("/remote-config", configParams);
       setisLoading(false);
       toast.success("Ads Settings updated successfully");
+      fetchRemoteConfig();
     } catch (error) {
       console.error("Error updating Remote Config:", error);
       setisLoading(false);

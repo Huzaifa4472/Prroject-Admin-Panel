@@ -2,7 +2,7 @@ import { useState } from "react";
 import { axiosInstance } from "../../axios";
 import { toast } from "react-toastify";
 
-function ContentBlocker({ configParams, setConfigParams }) {
+function ContentBlocker({ configParams, setConfigParams, fetchRemoteConfig }) {
   const [isLoading, setisLoading] = useState(false);
   const handleParamChange = (e, paramName) => {
     const value =
@@ -10,20 +10,16 @@ function ContentBlocker({ configParams, setConfigParams }) {
         ? e.target.checked.toString()
         : e.target.value;
 
-    // Copy the entire configParams object
     const updatedConfigParams = { ...configParams };
 
-    // Check if parameterGroups is an object (instead of an array)
     if (
       typeof updatedConfigParams.parameterGroups === "object" &&
       updatedConfigParams.parameterGroups !== null
     ) {
-      // Update the specific parameters within the parameterGroups
       updatedConfigParams.parameterGroups = Object.keys(
         updatedConfigParams.parameterGroups
       ).reduce((groups, groupId) => {
         if (groupId === "Content Blocker") {
-          // Update parameters within the Content Blocker group
           groups[groupId] = {
             ...updatedConfigParams.parameterGroups[groupId],
             parameters: {
@@ -53,14 +49,13 @@ function ContentBlocker({ configParams, setConfigParams }) {
     e.preventDefault();
     try {
       await axiosInstance.post("/remote-config", configParams);
+      fetchRemoteConfig();
       setisLoading(false);
       toast.success("Content Blocker updated successfully");
-      setOpen(true);
     } catch (error) {
       console.error("Error updating Remote Config:", error);
       setisLoading(false);
       toast.error(`${error.message}`);
-      setOpen(true);
     }
   };
 

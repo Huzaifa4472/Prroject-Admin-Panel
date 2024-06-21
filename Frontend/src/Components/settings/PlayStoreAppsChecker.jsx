@@ -2,7 +2,11 @@ import { useState } from "react";
 import { axiosInstance } from "../../axios";
 import { toast } from "react-toastify";
 
-function PlayStoreAppsChecker({ configParams, setConfigParams }) {
+function PlayStoreAppsChecker({
+  configParams,
+  setConfigParams,
+  fetchRemoteConfig,
+}) {
   const [isLoading, setisLoading] = useState(false);
   const [Open, setOpen] = useState(true);
   const handleParamChange = (e, paramName) => {
@@ -55,13 +59,12 @@ function PlayStoreAppsChecker({ configParams, setConfigParams }) {
     try {
       await axiosInstance.post("/remote-config", configParams);
       setisLoading(false);
+      fetchRemoteConfig();
       toast.success("Play Store Apps Checker updated successfully");
-      setOpen(true);
     } catch (error) {
       console.error("Error updating Remote Config:", error);
       setisLoading(false);
       toast.error(`${error.message}`);
-      setOpen(true);
     }
   };
 

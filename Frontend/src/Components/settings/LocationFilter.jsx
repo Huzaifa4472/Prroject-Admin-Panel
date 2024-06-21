@@ -2,7 +2,7 @@ import { useState } from "react";
 import { axiosInstance } from "../../axios";
 import { toast } from "react-toastify";
 
-function LocationFilter({ configParams, setConfigParams, setOpen }) {
+function LocationFilter({ configParams, setConfigParams, fetchRemoteConfig }) {
   const [isLoading, setisLoading] = useState(false);
   const handleParamChange = (e, paramName) => {
     const value =
@@ -10,20 +10,16 @@ function LocationFilter({ configParams, setConfigParams, setOpen }) {
         ? e.target.checked.toString()
         : e.target.value;
 
-    // Copy the entire configParams object
     const updatedConfigParams = { ...configParams };
 
-    // Check if parameterGroups is an object (instead of an array)
     if (
       typeof updatedConfigParams.parameterGroups === "object" &&
       updatedConfigParams.parameterGroups !== null
     ) {
-      // Update the specific parameters within the parameterGroups
       updatedConfigParams.parameterGroups = Object.keys(
         updatedConfigParams.parameterGroups
       ).reduce((groups, groupId) => {
         if (groupId === "Location Filter") {
-          // Update parameters within the Location Filter group
           groups[groupId] = {
             ...updatedConfigParams.parameterGroups[groupId],
             parameters: {
@@ -43,7 +39,6 @@ function LocationFilter({ configParams, setConfigParams, setOpen }) {
       }, {});
     }
 
-    // Set the updated configParams object
     setConfigParams(updatedConfigParams);
   };
 
@@ -53,14 +48,13 @@ function LocationFilter({ configParams, setConfigParams, setOpen }) {
     e.preventDefault();
     try {
       await axiosInstance.post("/remote-config", configParams);
+      fetchRemoteConfig();
       setisLoading(false);
       toast.success("Location Settings updated successfully");
-      setOpen(true);
     } catch (error) {
       console.error("Error updating Remote Config:", error);
       setisLoading(false);
       toast.error(`${error.message}`);
-      setOpen(true);
     }
   };
 

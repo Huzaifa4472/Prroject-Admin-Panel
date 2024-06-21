@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { axiosInstance } from '../../axios';
-import { toast } from 'react-toastify';
+import { useState } from "react";
+import { axiosInstance } from "../../axios";
+import { toast } from "react-toastify";
 
-function AppSecurity({ configParams, setConfigParams }) {
+function AppSecurity({ configParams, setConfigParams, fetchRemoteConfig }) {
   const [isLoading, setisLoading] = useState(false);
   const handleParamChange = (e, paramName) => {
     const value =
-      e.target.type === 'checkbox'
+      e.target.type === "checkbox"
         ? e.target.checked.toString()
         : e.target.value;
 
@@ -15,14 +15,14 @@ function AppSecurity({ configParams, setConfigParams }) {
 
     // Check if parameterGroups is an object (instead of an array)
     if (
-      typeof updatedConfigParams.parameterGroups === 'object' &&
+      typeof updatedConfigParams.parameterGroups === "object" &&
       updatedConfigParams.parameterGroups !== null
     ) {
       // Update the specific parameters within the parameterGroups
       updatedConfigParams.parameterGroups = Object.keys(
         updatedConfigParams.parameterGroups
       ).reduce((groups, groupId) => {
-        if (groupId === 'App Security') {
+        if (groupId === "App Security") {
           // Update parameters within the App Security group
           groups[groupId] = {
             ...updatedConfigParams.parameterGroups[groupId],
@@ -52,16 +52,15 @@ function AppSecurity({ configParams, setConfigParams }) {
 
     e.preventDefault();
     try {
-      await axiosInstance.post('/remote-config', configParams);
+      await axiosInstance.post("/remote-config", configParams);
 
       setisLoading(false);
-      toast.success('App Security Settings updated successfully');
-      setOpen(true);
+      fetchRemoteConfig();
+      toast.success("App Security Settings updated successfully");
     } catch (error) {
-      console.error('Error updating Remote Config:', error);
+      console.error("Error updating Remote Config:", error);
       setisLoading(false);
       toast.error(`${error.message}`);
-      setOpen(true);
     }
   };
 
@@ -82,44 +81,44 @@ function AppSecurity({ configParams, setConfigParams }) {
           <div className="dark:bg-[#333438] bg-white shadow-lg border border-[#ffffff1a] p-3 rounded-xl">
             <div className="flex flex-col gap-5 text-black dark:text-[#FDFDFD]">
               {Object.keys(
-                configParams.parameterGroups['App Security'].parameters
+                configParams.parameterGroups["App Security"].parameters
               ).map((paramName) => (
                 <div
                   key={paramName}
                   className="flex items-center text-sm gap-14 lg:gap-40 my-2"
                 >
-                  {configParams.parameterGroups['App Security'].parameters[
+                  {configParams.parameterGroups["App Security"].parameters[
                     paramName
-                  ]?.valueType === 'STRING' ? (
+                  ]?.valueType === "STRING" ? (
                     <div className="flex flex-col w-full gap-3">
                       <label className="dark:text-[#FDFDFD]">
                         {
-                          configParams.parameterGroups['App Security']
+                          configParams.parameterGroups["App Security"]
                             .parameters[paramName]?.description
                         }
                       </label>
                       <input
                         type="text"
                         value={
-                          configParams.parameterGroups['App Security']
+                          configParams.parameterGroups["App Security"]
                             .parameters[paramName]?.defaultValue.value
                         }
                         onChange={(e) => handleParamChange(e, paramName)}
                         className="bg-transparent border dark:text-[#FDFDFD] w-[100%] rounded-lg p-2"
                       />
                     </div>
-                  ) : configParams.parameterGroups['App Security'].parameters[
+                  ) : configParams.parameterGroups["App Security"].parameters[
                       paramName
-                    ]?.valueType === 'BOOLEAN' ? (
+                    ]?.valueType === "BOOLEAN" ? (
                     <div className="flex items-center w-[100%] gap-4">
                       <input
                         type="checkbox"
                         className="toggle dark:text-[#FDFDFD] toggle-md checked:bg-white bg-white"
                         onChange={(e) => handleParamChange(e, paramName)}
                         checked={
-                          configParams.parameterGroups['App Security']
+                          configParams.parameterGroups["App Security"]
                             .parameters[paramName]?.defaultValue.value ===
-                          'false'
+                          "false"
                             ? false
                             : true
                         }
@@ -127,13 +126,13 @@ function AppSecurity({ configParams, setConfigParams }) {
 
                       <label className="dark:text-[#FDFDFD]">
                         {
-                          configParams.parameterGroups['App Security']
+                          configParams.parameterGroups["App Security"]
                             .parameters[paramName]?.description
                         }
                       </label>
                     </div>
                   ) : (
-                    ''
+                    ""
                   )}
                 </div>
               ))}

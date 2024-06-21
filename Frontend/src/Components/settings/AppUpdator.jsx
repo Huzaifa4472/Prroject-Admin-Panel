@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 import { axiosInstance } from "../../axios";
 import { useState } from "react";
 
-function AppUpdator({ configParams, setConfigParams }) {
+function AppUpdator({ configParams, setConfigParams, fetchRemoteConfig }) {
   const [isLoading, setisLoading] = useState(false);
   const handleParamChange = (e, paramName) => {
     const value = e.target.value;
@@ -18,7 +18,6 @@ function AppUpdator({ configParams, setConfigParams }) {
       defaultValue[0][paramName] = value;
     }
 
-    // Stringify the updated object
     updatedConfigParams.parameters.app_updater.defaultValue.value =
       JSON.stringify(defaultValue);
     setConfigParams(updatedConfigParams);
@@ -29,14 +28,13 @@ function AppUpdator({ configParams, setConfigParams }) {
     setisLoading(true);
     try {
       await axiosInstance.post("/remote-config", configParams);
+      fetchRemoteConfig();
       setisLoading(false);
       toast.success("App Update settings updated successfully");
-      setOpen(true);
     } catch (error) {
       console.error("Error updating Remote Config:", error);
       setisLoading(false);
       toast.error(`${error.message}`);
-      setOpen(true);
     }
   };
 

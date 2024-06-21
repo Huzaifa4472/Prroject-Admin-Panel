@@ -4,7 +4,7 @@ import { axiosInstance } from "../../axios";
 import { DarkModeContext } from "../../context/darkModeContext";
 import { toast } from "react-toastify";
 
-const AppConfig = ({ configParams, setConfigParams }) => {
+const AppConfig = ({ configParams, setConfigParams, fetchRemoteConfig }) => {
   console.log("configParams", configParams);
 
   const { setToastMessage, setOpen } = useContext(DarkModeContext);
@@ -68,6 +68,7 @@ const AppConfig = ({ configParams, setConfigParams }) => {
     try {
       await axiosInstance.post("/remote-config", configParams);
       setisLoading(false);
+      fetchRemoteConfig();
       toast.success("App Configuration updated successfully", {});
     } catch (error) {
       console.error("Error updating Remote Config:", error);

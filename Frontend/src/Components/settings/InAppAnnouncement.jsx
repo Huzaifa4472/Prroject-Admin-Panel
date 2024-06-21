@@ -5,7 +5,11 @@ import { DarkModeContext } from "../../context/darkModeContext";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function InAppAnnouncement({ configParams, setConfigParams, setOpen }) {
+function InAppAnnouncement({
+  configParams,
+  setConfigParams,
+  fetchRemoteConfig,
+}) {
   const { setToastMessage } = useContext(DarkModeContext);
   const [isLoading, setisLoading] = useState(false);
 
@@ -56,10 +60,9 @@ function InAppAnnouncement({ configParams, setConfigParams, setOpen }) {
     );
 
     try {
-      const response = await axiosInstance.post("/remote-config", configParams);
-      console.log("Server response:", response);
+      await axiosInstance.post("/remote-config", configParams);
+      fetchRemoteConfig();
       toast.success("In App Announcement updated successfully");
-      setOpen(true);
     } catch (error) {
       console.error(
         "Error updating Remote Config:",

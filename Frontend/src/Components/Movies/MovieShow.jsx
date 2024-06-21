@@ -7,7 +7,6 @@ import EditMovie from "./EditMovies/EditMovie";
 import DeleteMovies from "./DeleteMovies/DeleteMovies";
 
 const MovieShow = ({
-  shows,
   currentPage,
   itemsPerPage,
   setshowToEdit,

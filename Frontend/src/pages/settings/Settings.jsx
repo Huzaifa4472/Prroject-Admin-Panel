@@ -41,6 +41,7 @@ function AdminPanel() {
               <AdsSetting
                 configParams={configParams}
                 setConfigParams={setConfigParams}
+                fetchRemoteConfig={fetchRemoteConfig}
               />
             }
           />
@@ -50,6 +51,7 @@ function AdminPanel() {
               <AppSecurity
                 configParams={configParams}
                 setConfigParams={setConfigParams}
+                fetchRemoteConfig={fetchRemoteConfig}
               />
             }
           />
@@ -59,6 +61,7 @@ function AdminPanel() {
               <LocationFilter
                 configParams={configParams}
                 setConfigParams={setConfigParams}
+                fetchRemoteConfig={fetchRemoteConfig}
                 setOpen={setOpen}
               />
             }
@@ -69,6 +72,7 @@ function AdminPanel() {
               <ContentBlocker
                 configParams={configParams}
                 setConfigParams={setConfigParams}
+                fetchRemoteConfig={fetchRemoteConfig}
               />
             }
           />
@@ -78,6 +82,7 @@ function AdminPanel() {
               <InAppAnnouncement
                 configParams={configParams}
                 setConfigParams={setConfigParams}
+                fetchRemoteConfig={fetchRemoteConfig}
                 setOpen={setOpen}
               />
             }
@@ -88,6 +93,7 @@ function AdminPanel() {
               <AppConfig
                 configParams={configParams}
                 setConfigParams={setConfigParams}
+                fetchRemoteConfig={fetchRemoteConfig}
               />
             }
           />
@@ -98,6 +104,7 @@ function AdminPanel() {
               <AppUpdator
                 configParams={configParams}
                 setConfigParams={setConfigParams}
+                fetchRemoteConfig={fetchRemoteConfig}
               />
             }
           />
@@ -107,6 +114,7 @@ function AdminPanel() {
               <PlayStoreAppsChecker
                 configParams={configParams}
                 setConfigParams={setConfigParams}
+                fetchRemoteConfig={fetchRemoteConfig}
               />
             }
           />

@@ -18,8 +18,8 @@ import { FilteredDataContext } from "../../../context/FilteredDataContext";
 import Navbar from "../../Navbar";
 
 const AllTvShows = ({ showAddTv, setShowAddTv }) => {
-  const { filteredShows: contextFilteredShows, shows: contextShows } =
-    useContext(FilteredDataContext);
+  // const { filteredShows: contextFilteredShows, shows: contextShows } =
+  //   useContext(FilteredDataContext);
   const [showAddTvShowPopup, setShowAddTvShowPopup] = useState(false);
   const [shows, setShows] = useState([]);
   const [filteredShows, setFilteredShows] = useState([]);
@@ -27,32 +27,25 @@ const AllTvShows = ({ showAddTv, setShowAddTv }) => {
   const [errorMesaage, setErrorMesaage] = useState("");
   const [totalLinks, setTotalLinks] = useState(0);
   const fetchData = useCallback(() => {
-    const shows = ref(db, "shows/");
-    const orderedQuery = query(shows, orderByChild("createdAt")); // Order by 'title' field
+    const showsRef = ref(db, "shows/");
+    const orderedQuery = query(showsRef, orderByChild("createdAt")); // Order by 'title' field
 
     try {
       onValue(orderedQuery, (snapshot) => {
         const data = snapshot.val();
         if (data) {
           const arrayOfObjects = Object.keys(data).map((key) => {
-            let newObj;
+            let newObj = {
+              "TMDB ID": key,
+              ...data[key],
+            };
             if (!data[key].createdAt) {
-              newObj = {
-                "TMDB ID": key,
-                ...data[key],
-                createdAt: Date.now(),
-              };
-              const db = getDatabase();
+              newObj.createdAt = Date.now();
               set(ref(db, "shows/" + key), newObj);
-            } else {
-              newObj = {
-                "TMDB ID": key,
-                ...data[key],
-              };
             }
             return newObj;
           });
-
+          console.log(data);
           const linksNo = arrayOfObjects.reduce((totalLinks, item) => {
             item.seasons.forEach((season) => {
               season.episodes.forEach((episode) => {
@@ -62,12 +55,13 @@ const AllTvShows = ({ showAddTv, setShowAddTv }) => {
             return totalLinks;
           }, 0);
           setTotalLinks(linksNo);
-          arrayOfObjects.sort((a, b) => {
-            return new Date(b.createdAt) - new Date(a.createdAt);
-          });
+          arrayOfObjects.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          );
+
           console.log("Sorated DATA", arrayOfObjects);
-          setFilteredShows(arrayOfObjects);
           setShows(arrayOfObjects);
+          setFilteredShows(arrayOfObjects);
         } else {
           setTotalLinks(0);
           setShows([]);
@@ -78,7 +72,7 @@ const AllTvShows = ({ showAddTv, setShowAddTv }) => {
         }
       });
     } catch (error) {
-      setErrorMesaage(error);
+      setErrorMesaage(error.message);
     }
   }, [db]);
 
@@ -86,9 +80,9 @@ const AllTvShows = ({ showAddTv, setShowAddTv }) => {
     fetchData();
   }, [fetchData]);
 
-  useEffect(() => {
-    setFilteredShows(contextFilteredShows);
-  }, [contextFilteredShows]);
+  // useEffect(() => {
+  //   setFilteredShows(contextFilteredShows);
+  // }, [contextFilteredShows]);
 
   const debounce = (func, delay) => {
     let timeoutId;
@@ -106,13 +100,10 @@ const AllTvShows = ({ showAddTv, setShowAddTv }) => {
         show["TMDB ID"].includes(e.target.value) ||
         show.title.toLowerCase().includes(e.target.value.toLowerCase())
     );
-    // if (filter.length) {
-    //   setFilteredShows(filter);
-    // } else {
-    //   setFilteredShows(allData);
-    // }
+
     setFilteredShows(filter.length ? filter : []);
   }, 300);
+  console.log("filtered show", filteredShows);
 
   return (
     <div className=" min-h-screen ">
