@@ -14,7 +14,6 @@ const TotalMovies = ({ setShowAddMovie, showAddMovie }) => {
   const [showAddTvShowPopup, setShowAddTvShowPopup] = useState(false);
   const [shows, setShows] = useState([]);
   const [filteredShows, setFilteredShows] = useState([]);
-  const [expandedRow, setExpandedRow] = useState(null);
   const [showToEdit, setShowToEdit] = useState({});
   const [errorMesaage, setErrorMesaage] = useState("");
   const [totalLinks, setTotalLinks] = useState(0);
@@ -22,10 +21,6 @@ const TotalMovies = ({ setShowAddMovie, showAddMovie }) => {
   const itemsPerPage = 20;
 
   const { setOpen } = useContext(DarkModeContext);
-
-  const handleExpandRow = (rowIndex) => {
-    setExpandedRow((prevRow) => (prevRow === rowIndex ? null : rowIndex));
-  };
 
   const fetchData = useCallback(() => {
     const controller = new AbortController();
@@ -51,9 +46,8 @@ const TotalMovies = ({ setShowAddMovie, showAddMovie }) => {
             }, 0);
             setTotalLinks(linksNo);
 
-            // Sort the array by createdAt property
             arrayOfObjects.sort(
-              (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+              (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
             );
 
             setShows(arrayOfObjects);

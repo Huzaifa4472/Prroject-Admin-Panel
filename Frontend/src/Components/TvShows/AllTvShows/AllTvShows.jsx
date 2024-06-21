@@ -1,14 +1,19 @@
 import { MdOutlineDesktopWindows } from "react-icons/md";
 import { HiMiniLink } from "react-icons/hi2";
-import { RxDividerVertical } from "react-icons/rx";
-import { RiSearchLine } from "react-icons/ri";
 import { AiFillPlusCircle } from "react-icons/ai";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import DashboardCard from "../../DashboardCard";
 import AddTvShow from "./AddTvShow/AddTvShow";
 import TvShow from "./TvShow";
 import { DarkModeContext } from "../../../context/darkModeContext";
-import { getDatabase, ref, onValue } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  onValue,
+  query,
+  orderByChild,
+  set,
+} from "firebase/database";
 import { FilteredDataContext } from "../../../context/FilteredDataContext";
 import Navbar from "../../Navbar";
 
@@ -19,23 +24,35 @@ const AllTvShows = ({ showAddTv, setShowAddTv }) => {
   const [shows, setShows] = useState([]);
   const [filteredShows, setFilteredShows] = useState([]);
   const db = getDatabase();
-  const [showToDelete, setShowToDelete] = useState();
   const [errorMesaage, setErrorMesaage] = useState("");
   const [totalLinks, setTotalLinks] = useState(0);
-  console.log("show data", shows);
   const fetchData = useCallback(() => {
-    const starCountRef = ref(db, "shows/");
+    const shows = ref(db, "shows/");
+    const orderedQuery = query(shows, orderByChild("createdAt")); // Order by 'title' field
 
     try {
-      onValue(starCountRef, (snapshot) => {
+      onValue(orderedQuery, (snapshot) => {
         const data = snapshot.val();
         if (data) {
-          const arrayOfObjects = Object.keys(data).map((key) => ({
-            "TMDB ID": key,
-            ...data[key],
-          }));
+          const arrayOfObjects = Object.keys(data).map((key) => {
+            let newObj;
+            if (!data[key].createdAt) {
+              newObj = {
+                "TMDB ID": key,
+                ...data[key],
+                createdAt: Date.now(),
+              };
+              const db = getDatabase();
+              set(ref(db, "shows/" + key), newObj);
+            } else {
+              newObj = {
+                "TMDB ID": key,
+                ...data[key],
+              };
+            }
+            return newObj;
+          });
 
-          console.log("Fetched data:", data); // Calculate total links
           const linksNo = arrayOfObjects.reduce((totalLinks, item) => {
             item.seasons.forEach((season) => {
               season.episodes.forEach((episode) => {
@@ -45,13 +62,12 @@ const AllTvShows = ({ showAddTv, setShowAddTv }) => {
             return totalLinks;
           }, 0);
           setTotalLinks(linksNo);
-
-          // Sort shows based on createdAt attribute
-          arrayOfObjects.sort((a, b) => b.createdAt - a.createdAt);
-          console.log("Sorted shows:", arrayOfObjects);
-
-          setShows(arrayOfObjects);
+          arrayOfObjects.sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          });
+          console.log("Sorated DATA", arrayOfObjects);
           setFilteredShows(arrayOfObjects);
+          setShows(arrayOfObjects);
         } else {
           setTotalLinks(0);
           setShows([]);
@@ -60,8 +76,6 @@ const AllTvShows = ({ showAddTv, setShowAddTv }) => {
             "No TV shows available to display. Try adding a TV show"
           );
         }
-        console.log("Updated shows:", shows);
-        console.log("Updated filtered shows:", filteredShows);
       });
     } catch (error) {
       setErrorMesaage(error);
@@ -75,9 +89,6 @@ const AllTvShows = ({ showAddTv, setShowAddTv }) => {
   useEffect(() => {
     setFilteredShows(contextFilteredShows);
   }, [contextFilteredShows]);
-
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const debounce = (func, delay) => {
     let timeoutId;
@@ -147,5 +158,4 @@ const AllTvShows = ({ showAddTv, setShowAddTv }) => {
     </div>
   );
 };
-
 export default AllTvShows;
