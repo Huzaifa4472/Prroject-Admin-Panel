@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const MovieTitleInputs = ({ show, handleUniqueInputChange, i }) => {
   return (
@@ -6,7 +6,7 @@ const MovieTitleInputs = ({ show, handleUniqueInputChange, i }) => {
       <label className="flex flex-col font-bold text-lg text-[#363848] grow gap-2">
         TMDB ID
         <input
-          value={show['TMDB ID']}
+          value={show["TMDB ID"]}
           onChange={(e) => handleUniqueInputChange(i, e)}
           type="text"
           name="TMDB ID"

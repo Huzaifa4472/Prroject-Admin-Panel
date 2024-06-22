@@ -1,7 +1,7 @@
 import AddPopupHeader from "./AddPopupHeader";
 import { getDatabase, ref, set } from "firebase/database";
 import { v4 as uuidv4 } from "uuid";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import TitleInputs from "../EditTvShow/TitleInputs";
 import EditSeasonDetails from "../EditTvShow/EditSeasonDetails";
 import { toast } from "react-toastify";
@@ -88,7 +88,6 @@ const AddTvShow = ({ setShowAddTvShowPopup, setShowAddTv }) => {
     );
     setShowAddTvShowPopup(false);
   };
-
   const addSeason = (showIndex) => {
     const updatedShows = [...shows];
     updatedShows[showIndex].seasons.push({
@@ -127,7 +126,7 @@ const AddTvShow = ({ setShowAddTvShowPopup, setShowAddTv }) => {
     setShows(newShows);
   };
   return (
-    <div className="fixed bg-[#d9d9d96c] dark:bg-[#333438a0]  z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
+    <div className="fixed bg-[#d9d9d954] dark:bg-[#3334388a]  z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
       <div className="bg-white dark:bg-[#0F0F0F] rounded-xl lg:mt-0 300px:mt-16 300px:max-h-[87%] 500px:max-h-[100%] overflow-scroll no-scrollbar w-full md:w-4/5 lg:w-1/2">
         <AddPopupHeader setShowAddTvShowPopup={setShowAddTvShowPopup} />
         {shows?.map((show, i) => (

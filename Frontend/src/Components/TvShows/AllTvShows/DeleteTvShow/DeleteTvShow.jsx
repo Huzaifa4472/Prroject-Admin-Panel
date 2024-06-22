@@ -34,7 +34,7 @@ const DeleteTvShow = ({ setShowDeletePopup, type, categoryId, onDelete }) => {
   };
 
   return (
-    <div className="fixed bg-[#d9d9d96c] dark:bg-[#333438a0] z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
+    <div className="fixed bg-[#d9d9d954] dark:bg-[#3334388a] z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">
       <div className="bg-white dark:bg-[#333438] rounded-xl p-4">
         <h3 className="ml-0 text-left text-[#ED1111] font-semibold text-xl">
           Delete TV Show

@@ -47,7 +47,7 @@ const TotalMovies = ({ setShowAddMovie, showAddMovie }) => {
             setTotalLinks(linksNo);
 
             arrayOfObjects.sort(
-              (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+              (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
             );
 
             setShows(arrayOfObjects);

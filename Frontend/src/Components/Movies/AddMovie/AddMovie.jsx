@@ -35,7 +35,12 @@ const AddMovie = ({ setShowAddTvShowPopup, setShowAddMovie }) => {
     setShows((prevShows) => {
       const newShows = [...prevShows];
       newShows[i][name] = value;
-      return newShows;
+
+      if (name === "TMDB ID" && shows.includes(value)) {
+        toast.error("TMDB ID already exists");
+      } else {
+        return newShows;
+      }
     });
   };
 

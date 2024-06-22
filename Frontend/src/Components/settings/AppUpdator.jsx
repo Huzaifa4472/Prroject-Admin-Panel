@@ -11,13 +11,11 @@ function AppUpdator({ configParams, setConfigParams, fetchRemoteConfig }) {
     const defaultValue = JSON.parse(
       updatedConfigParams.parameters.app_updater.defaultValue.value
     );
-
     if (paramName === "releaseNotes") {
       defaultValue[0][paramName] = value.split(",");
     } else {
       defaultValue[0][paramName] = value;
     }
-
     updatedConfigParams.parameters.app_updater.defaultValue.value =
       JSON.stringify(defaultValue);
     setConfigParams(updatedConfigParams);
