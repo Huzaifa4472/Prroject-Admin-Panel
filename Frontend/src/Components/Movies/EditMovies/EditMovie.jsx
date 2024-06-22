@@ -2,7 +2,7 @@ import EditMoviePopupHeader from "./EditMoviePopupHeader";
 import EditMovieDetails from "./EditMovieDetails";
 import MovieTitleInputs from "./MovieTitleInputs";
 import { useContext, useEffect, useState, useCallback } from "react";
-import { getDatabase, ref, onValue, update } from "firebase/database";
+import { getDatabase, ref, onValue, update, get } from "firebase/database";
 import { v4 as uuidv4 } from "uuid";
 import { DarkModeContext } from "../../../context/darkModeContext";
 import { toast } from "react-toastify";
@@ -106,25 +106,49 @@ const EditMovie = ({ setShowEditPopup, showToEdit }) => {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     const db = getDatabase();
     const updates = {};
-    updates["movies/" + showToEdit] = null;
-    updates["movies/" + shows[0]["TMDB ID"]] = shows[0];
-
-    const options = { timeZone: "Asia/Dubai" };
-    updates["lastUpdated/time"] = new Date().toLocaleString("en-US", options);
-    update(ref(db), updates)
-      .then(() => {
-        setShowEditPopup(false);
-        toast.success(`TMDB ID (${shows[0]["TMDB ID"]}) Updated Successfully`);
-      })
-      .catch((error) => {
-        console.error("Error updating data:", error);
-      });
+    const tmdbId = shows[0]["TMDB ID"];
+  
+    try {
+      // Fetch all movies from the database
+      const moviesRef = ref(db, "movies");
+      const snapshot = await get(moviesRef);
+      if (snapshot.exists()) {
+        const movies = snapshot.val();
+        const existingMovies = Object.values(movies).filter(movie => movie["TMDB ID"] !== showToEdit);
+  
+        // Check if TMDB ID already exists in other records
+        const tmdbIdExists = existingMovies.some(movie => movie["TMDB ID"] === tmdbId);
+  
+        if (tmdbIdExists) {
+          // TMDB ID already exists, show toast message
+          toast.error(`TMDB ID (${tmdbId}) already exists. Update failed.`);
+        } else {
+          // TMDB ID does not exist, proceed with update
+          updates["movies/" + showToEdit] = null;
+          updates["movies/" + tmdbId] = shows[0];
+  
+          const options = { timeZone: "Asia/Dubai" };
+          updates["lastUpdated/time"] = new Date().toLocaleString("en-US", options);
+  
+          // Perform update
+          await update(ref(db), updates);
+          setShowEditPopup(false);
+          toast.success(`TMDB ID (${tmdbId}) Updated Successfully`);
+        }
+      } else {
+        console.log("No data available");
+      }
+    } catch (error) {
+      console.error("Error checking TMDB ID:", error);
+    }
   };
+  
+  
 
   return (
     <div className="fixed bg-[#d9d9d931] dark:bg-[#33343836] z-30 px-4 w-[100%] left-0 top-0 h-full flex items-center justify-center">

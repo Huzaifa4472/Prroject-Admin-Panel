@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getDatabase, ref, set } from "firebase/database";
+import { get, getDatabase, ref, set } from "firebase/database";
 import { v4 as uuidv4 } from "uuid";
 import AddMoviePopupHeader from "./AddMoviePopupHeader";
 import MovieTitleInputs from "./MovieTitleInputs";
@@ -44,33 +44,58 @@ const AddMovie = ({ setShowAddTvShowPopup, setShowAddMovie }) => {
     });
   };
 
-  const handleSubmit = async () => {
-    navigate("/Movies/All-movies");
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+  
     if (!shows[0]["TMDB ID"].trim() || !shows[0].title.trim()) {
       toast.error("TMDB ID and title are required");
       return;
     }
-
+  
     const db = getDatabase();
     const showId = shows[0]["TMDB ID"];
+  
     try {
-      await set(ref(db, "movies/" + showId), {
-        ...shows[0],
-        createdAt: Date.now(),
-      });
-      const options = { timeZone: "Asia/Dubai" };
-      await set(
-        ref(db, "lastUpdated/time"),
-        new Date().toLocaleString("en-US", options)
-      );
-      toast.success(
-        `New movie (${shows[0].title}) with TMDB ID (${shows[0]["TMDB ID"]}) added successfully`
-      );
-      setShowPopup(false); // Hide the popup after successful form submission
+      // Fetch all movies from the database
+      const moviesRef = ref(db, "movies");
+      const snapshot = await get(moviesRef);
+  
+      if (snapshot.exists()) {
+        const movies = snapshot.val();
+        const tmdbIdExists = Object.values(movies).some(movie => movie["TMDB ID"] === showId);
+  
+        if (tmdbIdExists) {
+          // TMDB ID already exists, show toast message
+          toast.error(`TMDB ID (${showId}) already exists. Cannot add duplicate.`);
+        } else {
+          // TMDB ID does not exist, proceed with adding the new movie
+          await set(ref(db, "movies/" + showId), {
+            ...shows[0],
+            createdAt: Date.now(),
+          });
+          const options = { timeZone: "Asia/Dubai" };
+          await set(ref(db, "lastUpdated/time"), new Date().toLocaleString("en-US", options));
+          toast.success(`New movie (${shows[0].title}) with TMDB ID (${showId}) added successfully`);
+          setShowAddTvShowPopup(false); // Hide the popup after successful form submission
+          navigate("/Movies/All-movies");
+        }
+      } else {
+        // No movies in the database, safe to add the new movie
+        await set(ref(db, "movies/" + showId), {
+          ...shows[0],
+          createdAt: Date.now(),
+        });
+        const options = { timeZone: "Asia/Dubai" };
+        await set(ref(db, "lastUpdated/time"), new Date().toLocaleString("en-US", options));
+        toast.success(`New movie (${shows[0].title}) with TMDB ID (${showId}) added successfully`);
+        setShowAddTvShowPopup(false); // Hide the popup after successful form submission
+        navigate("/Movies/All-movies");
+      }
     } catch (error) {
       toast.error(`Error: ${error.message}`);
     }
   };
+  
 
   const handleAddLink = (showIndex) => {
     const lastLink = shows[showIndex].links[shows[showIndex].links.length - 1];
