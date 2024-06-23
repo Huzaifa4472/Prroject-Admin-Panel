@@ -19,12 +19,13 @@ function AdminPanel() {
   useEffect(() => {
     fetchRemoteConfig();
   }, [location.pathname]);
-
+  console.log("confiparams", configParams);
   const fetchRemoteConfig = async () => {
     try {
       const response = await axiosInstance.get("/remote-config");
       const data = await response.data;
       setConfigParams(data);
+      console.log("data", data);
       setOpen(true);
     } catch (error) {
       console.error("Error fetching Remote Config:", error.message);
