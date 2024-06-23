@@ -47,7 +47,7 @@ const EditNewEpisode = ({
             }
             name={`host_${i}_${episodeId}_${linkId}`}
             type="text"
-            className="border-[1px] border-[#C8C8C8] dark:border-[#FDFDFD] dark:bg-[#333438] bg-transparent rounded-lg px-3 w-full py-2 text-[#1D1C1C] dark:text-[#FDFDFD] text-base font-normal grow outline-none placeholder:text-base"
+            className="border-[1px] border-[#C8C8C8] dark:border-[#FDFDFD] dark:bg-[#333438] bg-transparent rounded-lg px-3 w-full py-2 text-black dark:text-white text-base font-normal grow outline-none placeholder:text-base"
             placeholder="Host 1"
             required
           />
@@ -58,7 +58,7 @@ const EditNewEpisode = ({
             }
             name={`size_${i}_${episodeId}_${linkId}`}
             type="text"
-            className="border-[1px] border-[#C8C8C8] dark:border-[#FDFDFD] dark:bg-[#333438] bg-transparent rounded-lg px-3 w-full py-2 text-[#1D1C1C] dark:text-[#FDFDFD] text-base font-normal grow outline-none placeholder:text-base"
+            className="border-[1px] border-[#C8C8C8] dark:border-[#FDFDFD] dark:bg-[#333438] bg-transparent rounded-lg px-3 w-full py-2 text-black dark:text-white text-base font-normal grow outline-none placeholder:text-base"
             placeholder="200 MB"
             required
           />
@@ -69,7 +69,7 @@ const EditNewEpisode = ({
             }
             name={`quality_${i}_${episodeId}_${linkId}`}
             type="text"
-            className="border-[1px] border-[#C8C8C8] dark:border-[#FDFDFD] dark:bg-[#333438] bg-transparent rounded-lg px-3 w-full py-2 text-[#1D1C1C] dark:text-[#FDFDFD] text-base font-normal grow outline-none placeholder:text-base"
+            className="border-[1px] border-[#C8C8C8] dark:border-[#FDFDFD] dark:bg-[#333438] bg-transparent rounded-lg px-3 w-full py-2 text-black dark:text-white text-base font-normal grow outline-none placeholder:text-base"
             placeholder="HD"
             required
           />
@@ -79,7 +79,7 @@ const EditNewEpisode = ({
               handleInputChange(e, i, episodeId, linkId, "url", id)
             }
             type="text"
-            className="break-all border-[1px] border-[#C8C8C8] dark:border-[#FDFDFD] dark:bg-[#333438] bg-transparent rounded-lg px-3 w-full py-2 text-[#1D1C1C] dark:text-[#FDFDFD] text-base font-normal grow outline-none placeholder:text-base col-span-3"
+            className="break-all border-[1px] border-[#C8C8C8] dark:border-[#FDFDFD] dark:bg-[#333438] bg-transparent rounded-lg px-3 w-full py-2 text-black dark:text-white text-base font-normal grow outline-none placeholder:text-base col-span-3"
             placeholder="www.themoviedb.org/tv/2316-the-office"
             required
           />
