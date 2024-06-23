@@ -28,7 +28,7 @@ function AppUpdator({ configParams, setConfigParams, fetchRemoteConfig }) {
     } else {
       defaultValue[paramName] = value;
     }
-
+// for commit
     updatedConfigParams.parameterGroups["API/App Config"].parameters["app_updater"].defaultValue.value = JSON.stringify(defaultValue);
     setConfigParams(updatedConfigParams);
   };
