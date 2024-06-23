@@ -12,7 +12,7 @@ const TitleInputs = ({ show, handleUniqueInputChange, i, uniqueId }) => {
         <input
           type="text"
           name="TMDB ID"
-          className="border-[1px] border-[#C8C8C8] bg-transparent rounded-lg px-3 py-2 text-[#858585] text-base font-normal w-full outline-none placeholder:text-base"
+          className="border-[1px] border-[#C8C8C8] bg-transparent rounded-lg px-3 py-2 text-black dark:text-white text-base font-normal w-full outline-none placeholder:text-base"
           placeholder="Enter"
           value={show["TMDB ID"]}
           onChange={handleChange}
@@ -25,7 +25,7 @@ const TitleInputs = ({ show, handleUniqueInputChange, i, uniqueId }) => {
         <input
           type="text"
           name="title"
-          className="border-[1px] border-[#C8C8C8] bg-transparent rounded-lg px-3 py-2 text-[#858585] text-base placeholder:text-base font-normal w-full outline-none"
+          className="border-[1px] border-[#C8C8C8] bg-transparent rounded-lg px-3 py-2 text-black dark:text-white text-base placeholder:text-base font-normal w-full outline-none"
           placeholder="Game of Thrones"
           value={show.title}
           onChange={(e) => handleUniqueInputChange(i, e)}

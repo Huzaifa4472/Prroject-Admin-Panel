@@ -1,5 +1,5 @@
 import AddPopupHeader from "./AddPopupHeader";
-import { getDatabase, ref, set } from "firebase/database";
+import { get, getDatabase, ref, set } from "firebase/database";
 import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 import TitleInputs from "../EditTvShow/TitleInputs";
@@ -70,24 +70,65 @@ const AddTvShow = ({ setShowAddTvShowPopup, setShowAddTv }) => {
     setShows(newShows);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
+    if (!shows[0]["TMDB ID"].trim() || !shows[0].title.trim()) {
+      toast.error("TMDB ID and title are required");
+      return;
+    }
     const db = getDatabase();
     const showId = shows[0]["TMDB ID"];
-    set(ref(db, "shows/" + showId), shows[0]);
-    const options = { timeZone: "Asia/Dubai" };
-    set(
-      ref(db, "lastUpdated/time"),
-      new Date().toLocaleString("en-US", options)
-    );
-    if (!window.location.pathname.includes("/TV-shows/Add-TvShow"))
-      setShowAddTv(false);
-    toast.success(
-      `New Tv Show (${shows[0]?.title}) with TMDB ID (${shows[0]["TMDB ID"]}) added successfully`
-    );
-    setShowAddTvShowPopup(false);
+    // set(ref(db, "shows/" + showId), shows[0]);
+    try {
+      const showRef = ref(db, "shows");
+      const snapshot = await get(showRef);
+      if (snapshot.exists()) {
+        const show = snapshot.val();
+        const tmdbIdExists = Object.values(show).some(
+          (show) => show["TMDB ID"] === showId
+        );
+        if (tmdbIdExists) {
+          toast.error(
+            `TMDB ID (${showId}) already exists. Cannot add duplicate.`
+          );
+        } else {
+          await set(ref(db, "shows/" + showId), {
+            ...shows[0],
+            createdAt: Date.now(),
+          });
+          const options = { timeZone: "Asia/Dubai" };
+          await set(
+            ref(db, "lastUpdated/time"),
+            new Date().toLocaleString("en-US", options)
+          );
+          if (!window.location.pathname.includes("/TV-shows/Add-TvShow"))
+            setShowAddTv(false);
+          toast.success(
+            `New Tv Show (${shows[0]?.title}) with TMDB ID (${shows[0]["TMDB ID"]}) added successfully`
+          );
+          setShowAddTvShowPopup(false);
+        }
+      } else {
+        await set(ref(db, "movies/" + showId), {
+          ...shows[0],
+          createdAt: Date.now(),
+        });
+        const options = { timeZone: "Asia/Dubai" };
+        await set(
+          ref(db, "lastUpdated/time"),
+          new Date().toLocaleString("en-US", options)
+        );
+        toast.success(
+          `New movie (${shows[0].title}) with TMDB ID (${showId}) added successfully`
+        );
+        setShowAddTvShowPopup(false); // Hide the popup after successful form submission
+        navigate("/Movies/All-movies");
+      }
+    } catch (error) {
+      toast.error(`Error: ${error.message}`);
+    }
   };
+
   const addSeason = (showIndex) => {
     const updatedShows = [...shows];
     updatedShows[showIndex].seasons.push({

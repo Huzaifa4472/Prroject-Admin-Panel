@@ -30,7 +30,7 @@ const EditMovieDetails = React.memo(
               <div className="flex flex-col md:grid grid-cols-1 md:grid-cols-3 break-words gap-4 p-4 my-2">
                 <input
                   type="text"
-                  className="border-[1px] border-[#C8C8C8] rounded-lg px-3 py-2 text-[#1D1C1C] dark:bg-[#333438] dark:text-[#FDFDFD] bg-transparent text-base font-normal grow outline-none placeholder:text-base"
+                  className="border-[1px] border-[#C8C8C8] rounded-lg px-3 py-2 text-black dark:text-white dark:bg-[#333438]  bg-transparent text-base font-normal grow outline-none placeholder:text-base"
                   placeholder="Host"
                   required
                   defaultValue={link.host}
@@ -39,7 +39,7 @@ const EditMovieDetails = React.memo(
                 />
                 <input
                   type="text"
-                  className="border-[1px] border-[#C8C8C8] rounded-lg px-3 py-2 text-[#1D1C1C] dark:bg-[#333438] dark:text-[#FDFDFD] bg-transparent text-base font-normal grow outline-none placeholder:text-base"
+                  className="border-[1px] border-[#C8C8C8] rounded-lg px-3 py-2  dark:bg-[#333438] text-black dark:text-white bg-transparent text-base font-normal grow outline-none placeholder:text-base"
                   placeholder="Size"
                   required
                   defaultValue={link.size}
@@ -48,7 +48,7 @@ const EditMovieDetails = React.memo(
                 />
                 <input
                   type="text"
-                  className="border-[1px] border-[#C8C8C8] rounded-lg px-3 py-2 text-[#1D1C1C] dark:bg-[#333438] dark:text-[#FDFDFD] bg-transparent text-base font-normal grow outline-none placeholder:text-base"
+                  className="border-[1px] border-[#C8C8C8] rounded-lg px-3 py-2  dark:bg-[#333438] text-black dark:text-white bg-transparent text-base font-normal grow outline-none placeholder:text-base"
                   placeholder="Quality"
                   required
                   defaultValue={link.quality}
@@ -57,7 +57,7 @@ const EditMovieDetails = React.memo(
                 />
                 <input
                   type="text"
-                  className="border-[1px] border-[#C8C8C8] rounded-lg px-3 py-2 text-[#1D1C1C] dark:bg-[#333438] dark:text-[#FDFDFD] bg-transparent text-base font-normal grow outline-none placeholder:text-base col-span-3"
+                  className="border-[1px] border-[#C8C8C8] rounded-lg px-3 py-2  dark:bg-[#333438] text-black dark:text-white bg-transparent text-base font-normal grow outline-none placeholder:text-base col-span-3"
                   placeholder="URL"
                   required
                   defaultValue={link.url}

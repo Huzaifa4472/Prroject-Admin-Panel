@@ -6,10 +6,10 @@ const MovieTitleInputs = ({ show, i, handleUniqueInputChange }) => {
         <input
           type="text"
           name="TMDB ID"
-          className="border-[1px] border-[#C8C8C8] rounded-lg px-3 py-2 text-[#858585] dark:text-[#FDFDFD] dark:bg-[#333438] bg-transparent text-base font-normal w-full outline-none placeholder:text-base"
+          className="border-[1px] border-[#C8C8C8] rounded-lg px-3 py-2 text-black dark:text-white dark:bg-[#333438] bg-transparent text-base font-normal w-full outline-none placeholder:text-base"
           placeholder="Enter"
           required
-          defaultValue={show['TMDB ID']}
+          defaultValue={show["TMDB ID"]}
           onChange={(e) => handleUniqueInputChange(i, e)}
         />
       </label>
@@ -19,7 +19,7 @@ const MovieTitleInputs = ({ show, i, handleUniqueInputChange }) => {
         <input
           type="text"
           name="title"
-          className="border-[1px] border-[#C8C8C8] rounded-lg px-3 py-2 text-[#858585] dark:text-[#FDFDFD] dark:bg-[#333438] bg-transparent text-base placeholder:text-base font-normal w-full outline-none"
+          className="border-[1px] border-[#C8C8C8] rounded-lg px-3 py-2 text-black dark:text-white dark:bg-[#333438] bg-transparent text-base placeholder:text-base font-normal w-full outline-none"
           placeholder="Enter title"
           required
           defaultValue={show.title}
