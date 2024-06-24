@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { auth } from '../firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { Link, useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
+import { useState } from "react";
+import { auth } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { Link, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 const Signup = () => {
   const [data, setData] = useState({});
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleInput = (e) => {
@@ -19,11 +19,11 @@ const Signup = () => {
     e.preventDefault();
     try {
       await createUserWithEmailAndPassword(auth, data.email, data.password);
-      navigate('/login');
+      navigate("/sign-in");
     } catch (err) {
       console.log(err.message);
-      if (err.message.includes('already-in-use')) {
-        setError('This email exists already, Try logging in');
+      if (err.message.includes("already-in-use")) {
+        setError("This email exists already, Try logging in");
       } else {
         setError(err.message);
       }

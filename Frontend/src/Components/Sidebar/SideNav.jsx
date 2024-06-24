@@ -1,17 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { RxDashboard } from 'react-icons/rx';
-import { MdOutlineLiveTv } from 'react-icons/md';
-import { PiFilmSlateThin } from 'react-icons/pi';
-import { FaAngleDown } from 'react-icons/fa6';
-import { GoGear } from 'react-icons/go';
-import { BsSliders } from 'react-icons/bs';
-import { IoClose } from 'react-icons/io5';
-import SettingsDropdown from './SettingsDropdown';
-import MoviesDropdown from './MoviesDropdown';
-import TvDropdown from './TvDropdown';
-import LightDarkThemeButtton from './LightDarkThemeButtton';
-import { IoMdMenu } from 'react-icons/io';
+import React, { useEffect, useRef, useState, useContext } from "react";
+import { Link } from "react-router-dom";
+import { getAuth, signOut } from "firebase/auth";
+
+import { AuthContext } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { RxDashboard } from "react-icons/rx";
+import { MdOutlineLiveTv } from "react-icons/md";
+import { PiFilmSlateThin } from "react-icons/pi";
+import { FaAngleDown } from "react-icons/fa6";
+import { GoGear } from "react-icons/go";
+import { BsSliders } from "react-icons/bs";
+import { IoClose } from "react-icons/io5";
+import SettingsDropdown from "./SettingsDropdown";
+import { AiOutlineLogout } from "react-icons/ai";
+import MoviesDropdown from "./MoviesDropdown";
+import TvDropdown from "./TvDropdown";
+import LightDarkThemeButtton from "./LightDarkThemeButtton";
+import { IoMdMenu } from "react-icons/io";
 
 const SideNav = () => {
   const [showSettingsDropdown, setShowSettingsDropdown] = useState(false);
@@ -19,16 +24,29 @@ const SideNav = () => {
   const [showMoviesDropdown, setShowMoviesDropdown] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
   const sidebarRef = useRef(null);
-
+  const { dispatch } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        dispatch({ type: "LOGOUT" });
+        navigate("/sign-in");
+        toast.success("Logout successful");
+      })
+      .catch((error) => {
+        console.log("logout error");
+      });
+  };
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
         setShowSidebar(false);
       }
     };
-    document.addEventListener('click', handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
     return () => {
-      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener("click", handleClickOutside);
     };
   }, []);
 
@@ -62,8 +80,8 @@ const SideNav = () => {
         ref={sidebarRef}
         className={`fixed top-[58px] lg:top-0 left-0 bottom-0 flex flex-col text-white bg-black p-4 rounded-r-md w-4/5 md:w-[280px] overflow-auto z-20 ${
           showSidebar
-            ? 'translate-x-0 ease-in-out'
-            : '-translate-x-[100%] lg:-translate-x-0 ease-in-out'
+            ? "translate-x-0 ease-in-out"
+            : "-translate-x-[100%] lg:-translate-x-0 ease-in-out"
         }`}
       >
         <h1 className="text-center px-3 py-4 first:text-lg  lg:text-3xl font-bold ">
@@ -72,12 +90,12 @@ const SideNav = () => {
         <ul className="flex flex-col gap-4 font-medium ">
           <Link
             className={`text-white hover:bg-white hover:text-black hover:font-semibold dark:hover:bg-[#333438] dark:hover:text-[#FDFDFD] flex items-center px-2 py-[10px] gap-3  rounded-md ${
-              window.location.pathname.includes('/TvShows') ||
-              window.location.pathname.includes('/Movies') ||
-              window.location.pathname.includes('/slider') ||
-              window.location.pathname.includes('/settings')
-                ? 'text-black'
-                : 'text-black dark:bg-[#333438] dark:text-[#FDFDFD] font-semibold'
+              window.location.pathname.includes("/TvShows") ||
+              window.location.pathname.includes("/Movies") ||
+              window.location.pathname.includes("/slider") ||
+              window.location.pathname.includes("/settings")
+                ? "text-black"
+                : "text-black dark:bg-[#333438] dark:text-[#FDFDFD] font-semibold"
             }`}
             to="/"
           >
@@ -91,9 +109,9 @@ const SideNav = () => {
           >
             <li
               className={`flex hover:bg-white dark:hover:bg-[#333438] dark:hover:text-[#FDFDFD] hover:text-black hover:font-semibold py-[10px] px-2 items-center justify-between rounded-md  ${
-                window.location.pathname.includes('/TvShows')
-                  ? 'bg-white dark:bg-[#333438] dark:text-[#FDFDFD] text-black font-semibold '
-                  : 'text-white'
+                window.location.pathname.includes("/TvShows")
+                  ? "bg-white dark:bg-[#333438] dark:text-[#FDFDFD] text-black font-semibold "
+                  : "text-white"
               }`}
             >
               <Link
@@ -104,7 +122,7 @@ const SideNav = () => {
                 TV Shows
               </Link>
               <FaAngleDown
-                className={`${showTvDropdown ? 'rotate-180' : ''}`}
+                className={`${showTvDropdown ? "rotate-180" : ""}`}
               />
             </li>
             {showTvDropdown && <TvDropdown />}
@@ -116,9 +134,9 @@ const SideNav = () => {
           >
             <li
               className={`flex hover:bg-white dark:hover:bg-[#333438] dark:hover:text-[#FDFDFD] hover:text-black hover:font-semibold py-[10px] px-2 items-center justify-between rounded-md  ${
-                window.location.pathname.includes('/Movies')
-                  ? 'bg-white dark:bg-[#333438] dark:text-[#FDFDFD] text-black font-semibold '
-                  : 'text-white'
+                window.location.pathname.includes("/Movies")
+                  ? "bg-white dark:bg-[#333438] dark:text-[#FDFDFD] text-black font-semibold "
+                  : "text-white"
               }`}
             >
               <div className="flex items-center gap-3">
@@ -126,16 +144,16 @@ const SideNav = () => {
                 Movies
               </div>
               <FaAngleDown
-                className={`${showMoviesDropdown ? 'rotate-180' : ''}`}
+                className={`${showMoviesDropdown ? "rotate-180" : ""}`}
               />
             </li>
             {showMoviesDropdown && <MoviesDropdown />}
           </div>
           <Link
             className={`flex dark:hover:bg-[#333438] dark:hover:text-[#FDFDFD] hover:bg-[white] hover:text-black hover:font-semibold  py-[10px] px-2 items-center gap-3 rounded-md ${
-              window.location.pathname.includes('/slider')
-                ? 'bg-white dark:bg-[#333438] dark:text-[#FDFDFD] text-black font-semibold '
-                : 'text-white'
+              window.location.pathname.includes("/slider")
+                ? "bg-white dark:bg-[#333438] dark:text-[#FDFDFD] text-black font-semibold "
+                : "text-white"
             }`}
             to="/slider"
           >
@@ -148,9 +166,9 @@ const SideNav = () => {
           >
             <li
               className={`flex  hover:bg-[white] hover:text-black dark:hover:bg-[#333438] dark:hover:text-[#FDFDFD] hover:font-semibold  py-[10px] px-2 items-center justify-between rounded-md ${
-                window.location.pathname.includes('/settings')
-                  ? 'bg-white dark:bg-[#333438] dark:text-[#FDFDFD] text-black font-semibold '
-                  : 'text-white'
+                window.location.pathname.includes("/settings")
+                  ? "bg-white dark:bg-[#333438] dark:text-[#FDFDFD] text-black font-semibold "
+                  : "text-white"
               }`}
             >
               <div className="flex items-center gap-3">
@@ -158,10 +176,20 @@ const SideNav = () => {
                 Settings
               </div>
               <FaAngleDown
-                className={`${showSettingsDropdown ? 'rotate-180' : ''}`}
+                className={`${showSettingsDropdown ? "rotate-180" : ""}`}
               />
             </li>
             {showSettingsDropdown && <SettingsDropdown />}
+          </div>
+          <div>
+            <button
+              className="text-white w-[100%] hover:bg-white hover:text-black hover:font-semibold dark:hover:bg-[#333438] dark:hover:text-[#FDFDFD] flex items-center px-2 py-[10px] gap-3  rounded-md"
+              type="button"
+              onClick={handleLogout}
+            >
+              <AiOutlineLogout />
+              LOGOUT
+            </button>
           </div>
         </ul>
         <br />
